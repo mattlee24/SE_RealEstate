@@ -9,7 +9,11 @@ class RegistrationForm(FlaskForm):
     password = PasswordField(validators=[DataRequired(), Length(min=8)])
     confirmPassword = PasswordField(validators=[DataRequired(), EqualTo('password')])
     role = SelectField(choices=[('Standard User', 'Standard User'),('Administrator', 'Administrator')])
-    submit = SubmitField('Confirm New User', id="submitbtn")
+    submit = SubmitField('Confirm New User', id="submitbtn-register")
 
-class PostsForm(FlaskForm):
+class LoginForm(FlaskForm):
+    email = StringField('Email', validators=[DataRequired(), email()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    submit = SubmitField('Login', id="submitbtn-login")
+
     
