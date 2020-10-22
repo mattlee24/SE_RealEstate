@@ -1,0 +1,109 @@
+{% extends 'base.html' %} 
+
+{% block head %}
+<title>Users</title>
+{% endblock %}
+
+{% block body %}
+
+    {% if current_user.is_authenticated %}
+        {% include 'navbar.html' %}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}" id="message">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+            {% block content %}
+                <table id="tblUsers" class="w3-table w3-card-4 w3-centered">
+                    <thead>
+                        <th>User ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Username</th>
+                        <th>Password</th>
+                        <th>Role</th>
+                        <th>Actions</th>
+                    </thead>
+                    <tbody>
+                        {% for user in data %}
+                                <tr>
+                                    <td>{{ user[0] }}</td>
+                                    <td>{{ user[1] }}</td>
+                                    <td>{{ user[2] }}</td>
+                                    <td>{{ user[3] }}</td>
+                                    <td>{{ user[4] }}</td>
+                                    <td>{{ user[5] }}</td>
+                                    <td><a href="account" class='btn btn-default w3-card-4' id='edit'><i class='material-icons'>edit</i></a><a class='btn btn-default w3-card-4' id='delete' onclick="displayYesNo()"><i class='material-icons'>delete</i></a></td>
+                                </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endblock content %}
+            <section id="sectYesNo" class="w3-animate-left">
+                <p id="userIDtoDelete"></p>
+                <p id="sure">Are you sure?</p>
+                <button class="btn btn-default w3-card-4" id="yes">Yes</button>
+                <button class="btn btn-default w3-card-4" id="no" onclick="document.getElementById('sectYesNo').style.display='none';">No</button>
+            </section>
+        {% else %}
+        <p id="pagenotfound">404</p>
+        <p id="pagenotfound2">Page Not Found</p>
+        {% endif %}
+
+        <script>
+            $("#tblUsers").on('click','#edit',function(){
+            var currentRow = $(this).closest('tr');
+            var col0 = currentRow.find("td:eq(0)").text();
+            var col1 = currentRow.find("td:eq(1)").text();
+            var col2 = currentRow.find("td:eq(2)").text();
+            var col3 = currentRow.find("td:eq(3)").text();
+            var col5 = currentRow.find("td:eq(5)").text();
+            sessionStorage.setItem("col0", col0)
+            sessionStorage.setItem("col1", col1)
+            sessionStorage.setItem("col2", col2)
+            sessionStorage.setItem("col3", col3)
+            sessionStorage.setItem("col5", col5)
+            });
+            function displayYesNo(){
+                document.getElementById('sectYesNo').style.display='block';
+                document.getElementById('userIDtoDelete').style.display='none';
+            }
+        </script>
+        <script>
+            $("#tblUsers").on('click','#delete',function(){
+            var currentRow = $(this).closest('tr');
+            var column = currentRow.find("td:eq(0)").text();
+            document.getElementById("userIDtoDelete").innerHTML = column;
+            });
+
+            var delUserBtn = document.getElementById("yes");
+
+            delUserBtn.onclick = function(event){
+            deleteUserFromDatabase(event);
+            }
+
+            function deleteUserFromDatabase(event){
+            event.preventDefault();
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("DELETE", '/deleteUser', true);
+            xhr.onload = function() {
+                if(xhr.readyState == 4 && xhr.status == 204){
+                    window.location.reload();
+                }
+                else{
+                    alert("error");
+                }
+            }
+
+            data = {IDofUser: document.getElementById("userIDtoDelete").innerHTML}
+            dataToString = JSON.stringify(data)
+            xhr.send(dataToString)
+            }
+        </script>
+
+{% endblock %}

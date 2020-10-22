@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Home</title>
+<link href="{{ url_for('static', filename='styles/navbarActive.css') }}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block body %} 
+
+    {% include 'navbar.html' %}
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }}" id="message">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+
+{% endblock %}
+            
+            

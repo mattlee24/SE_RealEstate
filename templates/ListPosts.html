@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% head block %}
+<link href="{{ url_for('static', filename='styles/ListPosts.css') }}" rel="stylesheet" type="text/css"/>
+{% endBlock %}
+
+{% block body %}
+<!--Adaptthe styling to match the global styling-->
+<!--fix the Added By: part to show the author of the post-->
+<div class="">
+    {% for row in posts %}
+    <div class="SinglePost">
+        <img href={{row.imgPath}}/>
+        <div>
+            <h1>{{row.title}}</h1>
+            <h2>{{row.date}}</h2>
+            <p>{{row.description}}</p>
+            <p>Author: {{row.author}}</p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+

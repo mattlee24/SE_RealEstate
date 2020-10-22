@@ -5,6 +5,7 @@
 }
 #smallPrint-register{
     color: white;
+    font-size: 12px;
 }
 #main-section-register{
     display: block;
@@ -61,4 +62,169 @@ body{
 }
 #submitbtn-login:hover{
     background-color:  rgba(152,251,152,1);
+}
+#li_item1 ion-icon{
+    font-size: 1.0em;
+    vertical-align: middle;
+    margin-right: 3px;
+    padding-bottom: 3.5px;
+}
+#li_item2 ion-icon{
+    font-size: 1.0em;
+    vertical-align: middle;
+    margin-right: 3px;
+    padding-bottom: 3.5px;
+}
+#li_item3 ion-icon{
+    font-size: 1.0em;
+    vertical-align: middle;
+    margin-right: 3px;
+    padding-bottom: 3.5px;
+}
+#li_item4 ion-icon{
+    font-size: 1.0em;
+    vertical-align: middle;
+    margin-right: 3px;
+    padding-bottom: 3.5px;
+}
+#li_item5 ion-icon{
+    font-size: 1.0em;
+    vertical-align: middle;
+    margin-right: 3px;
+    padding-bottom: 3.5px;
+}
+nav ul li a{
+    color: grey;
+    background-color: rgba(225, 225, 225, 0.1);
+    display: block;
+    text-align: center;
+    width: auto;
+    text-decoration: none; 
+}
+nav ul li a:hover{
+    color: #ffe0e0;
+    background-color: rgb(117, 117, 117);
+}
+nav ul li{
+    margin-right: 5px;
+    float: left;
+}
+nav ul{
+    width: auto;
+    list-style: none;
+}
+#navSection{
+    justify-content: space-between;
+    background-color: #ffe0e0;
+}
+.w3-table{
+    width: 50% !important;
+    margin: auto;
+    margin-top: 50px;
+    color: grey;
+    background-color: #ffe0e0;
+}
+#edit{
+    background-color: rgba(225, 225, 225, 0.5);
+    color: white !important;
+    margin-right: 4px;
+}
+#edit:hover{
+    background-color: rgba(225, 225, 225, 0.1);
+    color: yellowgreen !important;
+}
+#delete{
+    background-color: rgba(225, 225, 225, 0.5);
+    color: white !important;
+}
+#delete:hover{
+    background-color: rgba(225, 225, 225, 0.1);
+    color: red !important;
+}
+.content-section{
+    width: 95%;
+    margin: auto;
+}
+#smallPrint{
+    color: white;
+}
+#main-section{
+    display: none;
+    width: 50%;
+    margin: auto;
+    margin-bottom: 50px;
+    background-color: rgba(225, 225, 225, 0.1);
+}
+#legend{
+    color: white;
+}
+#message{
+    text-align: center;
+}
+#submitbtn{
+    background-color: rgba(152,251,152,0.7);
+    color: white;
+    display: block;
+    width: 100%;
+}
+#submitbtn:hover{
+    background-color:  rgba(152,251,152,1);
+}
+.content-section{
+    width: 95%;
+    margin: auto;
+    margin-top: 142px;
+}
+#updatebtn{
+    background-color: rgba(152,251,152,0.7) !important;
+    color: white !important;
+    display: block !important;
+    width: 100% !important;
+}
+#updatebtn:hover{
+    background-color:  rgba(152,251,152,1) !important;
+}
+#IntegerField{
+    display: none;
+}
+#sectYesNo{
+    display: none;
+    width: 25%;
+    margin: auto;
+}
+#sectYesNo #yes{
+    color: grey;
+    width: 100%;
+    background-color: #ffe0e0;
+    margin-bottom: 4px;
+}
+#sectYesNo #yes:hover{
+    background-color: rgb(117, 117, 117);
+    color: #ffe0e0 !important;
+}
+#sectYesNo #no{
+    color: grey;
+    width: 100%;
+    background-color: #ffe0e0;
+}
+#sectYesNo #no:hover{
+    background-color: rgb(117, 117, 117);
+    color: #ffe0e0 !important;
+}
+#sectYesNo p{
+    color: white;
+    width: 100%;
+    text-align: center;
+    font-size: 50px;
+}
+#pagenotfound{
+    text-align: center;
+    font-size: 400px;
+    color: tomato;
+}
+#pagenotfound2{
+    text-align: center;
+    font-size: 100px;
+    margin-bottom: 50px;
+    color: tomato;
 }

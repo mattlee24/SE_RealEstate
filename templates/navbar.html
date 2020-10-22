@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <nav id="navSection" class="navbar navbar-expand-lg navbar-dark sticky-top w3-card-4">
+        <ul class="navbar-nav">
+            <li id="li_item1" class="nav-item">
+                <a class="btn btn-default" href="main"><ion-icon name="home"></ion-icon>Home</a>
+            </li>
+            {% if current_user.role == 'Administrator' %}
+                <li id="li_item2" class="nav-item">
+                    <a href="users" class="btn btn-default"><ion-icon name="person"></ion-icon>Users</a></li>
+                </li>
+            {% endif %}
+            <li id="li_item3" class="nav-item">
+                <a href="logout" class="btn btn-default"><ion-icon name="backspace"></ion-icon>Logout</a></li>
+            </li>
+        </ul>
+        <form id="searchbar" class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button> 
+        </form>
+    </nav>
+  {% endblock %}
+
+  

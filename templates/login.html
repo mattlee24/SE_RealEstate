@@ -1,68 +1,58 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Login</title>
-        <!--W3 CSS-->
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+{% extends 'base.html' %}
 
-        <!--My CSS-->
-        <link href="{{ url_for('static', filename='styles/main.css') }}" rel="stylesheet" type="text/css"/>
-        <!--Boostrap CSS-->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    </head>
-    <body>
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}" id="message">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-        <div class="w3-card-4" id="main-section-login"><br>
-            {% block content %}
-                <div class="content-section-login">
-                    <form method="POST", action="" id="LoginForm">
-                        {{ form.hidden_tag() }}
-                        <fieldset class="form-group">
-                            <legend class="border-bottom mb-4" id="legend-login">Sign In</legend>
-                            <div class="form-group">
-                                {% if form.email.errors %}
-                                    {{ form.email(class="form-control form-control-lg is-invalid", placeholder="Email") }}
-                                    <div class="invalid-feedback">
-                                        {% for error in form.email.errors %}
-                                            <span>{{ error }}</span>
-                                        {% endfor %}
-                                    </div>
-                                {% else %}
-                                    {{ form.email(class="form-control form-control-lg", placeholder="Email") }}
-                                {% endif %}
-                            </div>
-                            <div class="form-group">
-                                {% if form.password.errors %}
-                                    {{ form.password(class="form-control form-control-lg is-invalid", placeholder="Password") }}
-                                    <div class="invalid-feedback">
-                                        {% for error in form.password.errors %}
-                                            <span>{{ error }}</span>
-                                        {% endfor %}
-                                    </div>
-                                {% else %}
-                                    {{ form.password(class="form-control form-control-lg", placeholder="Password") }}
-                                {% endif %}
-                            </div>
-                            <div class="form-group">
-                                {{ form.submit(class="btn btn-default") }}
-                            </div>
-                            <legend class="border-top mb-4" id="smallPrint-login">Forgot Password? <a  href="#">Click Here</a></legend>
-                        </fieldset>
-                    </form>
-                </div>
-            {% endblock content %}
-        </div>
-    </body>
-</html>
+{% block head %}
+<title>Login</title>
+{% endblock %}
+
+{% block body %} 
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }}" id="message">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+    <div class="w3-card-4" id="main-section-login"><br>
+        {% block content %}
+            <div class="content-section-login">
+                <form method="POST", action="" id="LoginForm">
+                    {{ form.hidden_tag() }}
+                    <fieldset class="form-group">
+                        <legend class="border-bottom mb-4" id="legend-login">Sign In</legend>
+                        <div class="form-group">
+                            {% if form.email.errors %}
+                                {{ form.email(class="form-control form-control-lg is-invalid", placeholder="Email") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.email.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.email(class="form-control form-control-lg", placeholder="Email") }}
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            {% if form.password.errors %}
+                                {{ form.password(class="form-control form-control-lg is-invalid", placeholder="Password") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.password.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.password(class="form-control form-control-lg", placeholder="Password") }}
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            {{ form.submit(class="btn btn-default") }}
+                        </div>
+                        <legend class="border-top mb-4" id="smallPrint-login">Forgot Password? <a href="#">Click Here</a><br>
+                                Don't have an account? <a  href="{{ url_for('register') }}">Click Here</a></legend>
+                    </fieldset>
+                </form>
+            </div>
+        {% endblock content %}
+    </div>
+{% endblock %}
