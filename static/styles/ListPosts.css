@@ -1,0 +1,78 @@
+.SinglePost{
+    width: 100%;
+    height: auto;
+    box-sizing: border-box;
+    background-color: #ffe0e0;
+    color: rgb(117, 117, 117);
+}
+.SinglePostImg{
+    width: 100%;
+    height: auto;
+    box-sizing: border-box;
+    background-color: #ffe0e0;
+    color: rgb(117, 117, 117);
+}
+.card{
+    width: 100%;
+    background-color: #ffe0e0;
+    color: rgb(117, 117, 117);
+    margin-top: 5px !important;
+}
+#li_item4 a{
+    color: #ffe0e0;
+    background-color: rgb(117, 117, 117);
+}  
+#img{
+    width: 35%;
+    margin-top: 5px !important;
+} 
+.PostCasing{
+    display: block;
+}
+ul {
+    list-style-type: none;
+}
+.btn-info{
+    margin-top: 5px;
+    margin-bottom: 4px;
+    width: 100%;
+}
+#buttons{
+    right: 0;
+}
+#createPost{
+    border-radius: 50%;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 4%;
+    text-align: center;
+    font-size: 35px;
+    vertical-align: middle !important;
+    background-color: #ffe0e0;
+    color: rgb(117, 117, 117);
+    margin-right: 10px;
+    border: none;
+    margin-bottom: 10px;
+}
+#createPost:hover{
+    background-color: rgb(117, 117, 117);
+    color: #ffe0e0;
+}
+#delete1{
+    background-color: #ffe0e0 !important;
+    color:  rgb(117, 117, 117) !important;
+    float: right;
+}
+#delete1:hover{
+    background-color: rgb(117, 117, 117) !important;
+    color: red !important;
+}
+#visibility{
+    background-color: #ffe0e0 !important;
+    color:  rgb(117, 117, 117) !important;
+}
+#visibility:hover{
+    color: #ffe0e0 !important;
+    background-color:  rgb(117, 117, 117) !important;
+}

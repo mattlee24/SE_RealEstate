@@ -2,6 +2,7 @@
 
 {% block head %}
 <title>Users</title>
+<link href="{{ url_for('static', filename='styles/users.css') }}" rel="stylesheet" type="text/css"/>
 {% endblock %}
 
 {% block body %}
@@ -37,7 +38,7 @@
                                     <td>{{ user[3] }}</td>
                                     <td>{{ user[4] }}</td>
                                     <td>{{ user[5] }}</td>
-                                    <td><a href="account" class='btn btn-default w3-card-4' id='edit'><i class='material-icons'>edit</i></a><a class='btn btn-default w3-card-4' id='delete' onclick="displayYesNo()"><i class='material-icons'>delete</i></a></td>
+                                    <td><a href="editUser" class='btn btn-default w3-card-4' id='edit'><i class='material-icons'>edit</i></a><a class='btn btn-default w3-card-4' id='delete' onclick="displayYesNo()"><i class='material-icons'>delete</i></a></td>
                                 </tr>
                         {% endfor %}
                     </tbody>

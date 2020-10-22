@@ -7,18 +7,35 @@
 
 {% block body %} 
 
-    {% include 'navbar.html' %}
+    {% if current_user.is_authenticated %}
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-        {% for category, message in messages %}
-            <div class="alert alert-{{ category }}" id="message">
-                {{ message }}
+        {% include 'navbar.html' %}
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}" id="message">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <div class="card w3-card-4" id="card">
+            <div class="card-body" id="card-body">
+                <h5 class="card-title">Logged in as: {{current_user.name}}</h5>
             </div>
-        {% endfor %}
-    {% endif %}
-    {% endwith %}
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">{{current_user.username}}</li>
+                <li class="list-group-item">{{current_user.email}}</li>
+                <li class="list-group-item">{{current_user.password}}</li>
+            </ul>
+        </div>
 
+    {% else %}
+        <p id="pagenotfound">404</p>
+        <p id="pagenotfound2">Page Not Found</p>
+    {% endif %}
 
 {% endblock %}
             

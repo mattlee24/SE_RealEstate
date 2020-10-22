@@ -1,0 +1,38 @@
+#UpdateForm{
+    display: block;
+}
+#main-section-editUser{
+    width: 50%;
+    margin: auto;
+    margin-bottom: 10px;
+    background-color: rgba(225, 225, 225, 0.1);
+}
+#legend-editUser{
+    color: white;
+}
+.content-section-editUser{
+    width: 95%;
+    margin: auto;
+    margin-top: 50px;
+}
+#updatebtn{
+    background-color: rgba(152,251,152,0.7) !important;
+    color: white !important;
+    display: block !important;
+    width: 100% !important;
+}
+#updatebtn:hover{
+    background-color:  rgba(152,251,152,1) !important;
+}
+#cancelbtn{
+    background-color: rgba(249, 251, 152, 0.7) !important;
+    color: white !important;
+    display: block !important;
+    width: 100% !important;
+}
+#cancelbtn:hover{
+    background-color:  rgb(249, 251, 152, 1) !important;
+}
+#IntegerField{
+    display: none;
+}

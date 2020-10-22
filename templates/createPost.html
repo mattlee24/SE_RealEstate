@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>New Post</title>
+    <link href="{{ url_for('static', filename='styles/createPost.css') }}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block body %}
+{% if current_user.is_authenticated %}
+    {% include 'navbar.html' %}
+        <div class="w3-card-4" id="main-section-createPost">
+            {% block content %}
+                <div class="content-section-createPost"><br>
+                    <form method="POST", action="" id="CreatePostForm">
+                        {{ form.hidden_tag() }}
+                        <fieldset class="form-group">
+                            <legend class="border-bottom mb-4" id="legend-createPost">Post Something New</legend>
+                            <div class="form-group">
+                                {% if form.title.errors %}
+                                    {{ form.title(class="form-control form-control-lg is-invalid", placeholder="Title") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.title.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.title(class="form-control form-control-lg", placeholder="Title") }}
+                                {% endif %}
+                            </div><br>
+                            <div class="form-group">
+                                {% if form.description.errors %}
+                                    {{ form.description(class="form-control form-control-lg is-invalid", placeholder="Description") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.description.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.description(class="form-control form-control-lg", placeholder="Description") }}
+                                {% endif %}
+                            </div><br>
+                            <div class="form-group">
+                                {% if form.imgPath.errors %}
+                                    {{ form.imgPath(class="form-control form-control-lg is-invalid", placeholder="https://cdn2.iconfinder.com/data/icons/basic-4/512/user-512.png") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.imgPath.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.imgPath(class="form-control form-control-lg", placeholder="https://cdn2.iconfinder.com/data/icons/basic-4/512/user-512.png") }}
+                                {% endif %}
+                            </div><br>
+                            <div class="form-group">
+                                {{ form.submit(class="btn btn-default") }}
+                            </div>
+                            <legend class="border-top pt-3" id="smallPrint-createPost"></legend>
+                        </fieldset>
+                    </form>
+                </div>
+            {% endblock content %}
+        </div>
+    {% else %}
+        <p id="pagenotfound">404</p>
+        <p id="pagenotfound2">Page Not Found</p>
+    {% endif %}
+{% endblock %}

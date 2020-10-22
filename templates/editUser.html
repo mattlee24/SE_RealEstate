@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% block head %}
+<title>Edit Account</title>
+<link href="{{ url_for('static', filename='styles/editUser.css') }}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+{% block body %}
+
+    {% if current_user.is_authenticated %}
+        {% include 'navbar.html' %}
+            <div class="w3-card-4" id="main-section-editUser">
+            {% block content %}
+                <div class="content-section-editUser"><br>
+                    <form method="POST", action="" id="UpdateForm">
+                        {{ form.hidden_tag() }}
+                        <fieldset class="form-group">
+                            <legend class="border-bottom mb-4" id="legend">Edit Existing User</legend>
+                            <div class="form-group">
+                                {{ form.id(class="form-control form-control-lg", placeholder="id") }}
+                            </div>
+                            <div class="form-group">
+                                {% if form.name.errors %}
+                                    {{ form.name(class="form-control form-control-lg is-invalid", placeholder="Name") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.name.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.name(class="form-control form-control-lg", placeholder="Name") }}
+                                {% endif %}
+                            </div><br>
+                            <div class="form-group">
+                                {% if form.email.errors %}
+                                    {{ form.email(class="form-control form-control-lg is-invalid", placeholder="Email") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.email.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.email(class="form-control form-control-lg", placeholder="Email") }}
+                                {% endif %}
+                            </div><br>
+                            <div class="form-group">
+                                {% if form.username.errors %}
+                                    {{ form.username(class="form-control form-control-lg is-invalid", placeholder="Username") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.username.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.username(class="form-control form-control-lg", placeholder="Username") }}
+                                {% endif %}
+                            </div><br>
+                            <div class="form-group">
+                                {% if form.password.errors %}
+                                    {{ form.password(class="form-control form-control-lg is-invalid", placeholder="Password") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.password.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.password(class="form-control form-control-lg", placeholder="Password") }}
+                                {% endif %}
+                            </div><br>
+                            <div class="form-group">
+                                {% if form.confirmPassword.errors %}
+                                    {{ form.confirmPassword(class="form-control form-control-lg is-invalid", placeholder="Confirm Password") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.confirmPassword.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.confirmPassword(class="form-control form-control-lg", placeholder="Confirm Password") }}
+                                {% endif %}
+                            </div><br>
+                            <div class="form-group">
+                                {% if form.role.errors %}
+                                    {{ form.role(class="form-control form-control-lg is-invalid") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.role.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.role(class="form-control form-control-sm") }}
+                                {% endif %}
+                            </div><br>
+                            <div class="form-group">
+                                {{ form.submit(class="btn btn-default") }}
+                            </div>
+                            <div class="form-group">
+                                <a class='btn btn-default' id="cancelbtn" href='users'>Cancel</a>
+                            </div>
+                            <legend class="border-top pt-3" id="smallPrint"></legend>
+                        </fieldset>
+                    </form>
+                </div>
+            </div> 
+            {% endblock content %}
+    {% else %}
+        <p id="pagenotfound">404</p>
+    {% endif %}
+
+
+    <script>
+        function fillForm() {
+            var col0 = sessionStorage.getItem("col0")
+            var col1 = sessionStorage.getItem("col1")
+            var col2 = sessionStorage.getItem("col2")
+            var col3 = sessionStorage.getItem("col3")
+            var col5 = sessionStorage.getItem("col5")
+            $("#IntegerField").val(col0);
+            $("#editName").val(col1);
+            $("#editEmail").val(col2);
+            $("#editUsername").val(col3);
+            $("#editRole").val(col5);
+        }
+
+        $(document).ready(function (){
+            fillForm();
+        });
+    </script>
+
+{% endblock %}

@@ -72,20 +72,6 @@
                                 {{ form.confirmPassword(class="form-control form-control-lg", placeholder="Confirm Password") }}
                             {% endif %}
                         </div><br>
-                        {% if current_user.role == 'Administrator' %}
-                            <div class="form-group">
-                                {% if form.role.errors %}
-                                    {{ form.role(class="form-control form-control-lg is-invalid") }}
-                                    <div class="invalid-feedback">
-                                        {% for error in form.role.errors %}
-                                            <span>{{ error }}</span>
-                                        {% endfor %}
-                                    </div>
-                                {% else %}
-                                    {{ form.role(class="form-control form-control-sm", placeholder="Role") }}
-                                {% endif %}
-                            </div><br>
-                        {% endif %}
                         <div class="form-group">
                             {{ form.submit(class="btn btn-default") }}
                         </div>

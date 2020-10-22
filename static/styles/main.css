@@ -1,3 +1,9 @@
+/*
+Primary Colours for Website
+background-color: #ffe0e0;
+color: rgb(117, 117, 117);
+*/ 
+
 .content-section-register{
     width: 95%;
     margin: auto;
@@ -227,4 +233,11 @@ nav ul{
     font-size: 100px;
     margin-bottom: 50px;
     color: tomato;
+}
+#card{
+    width: 15%;
+    margin-left: 5px;
+    background-color: #ffe0e0 !important;
+    color: rgb(117, 117, 117) !important;
+    margin-top: 5px;
 }

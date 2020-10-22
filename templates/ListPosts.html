@@ -1,24 +1,58 @@
 {% extends 'base.html' %}
 
-{% head block %}
+{% block head %}
 <link href="{{ url_for('static', filename='styles/ListPosts.css') }}" rel="stylesheet" type="text/css"/>
-{% endBlock %}
+{% endblock %}
 
 {% block body %}
-<!--Adaptthe styling to match the global styling-->
-<!--fix the Added By: part to show the author of the post-->
-<div class="">
+{% if current_user.is_authenticated %}
+    {% include 'navbar.html' %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }}" id="message">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
     {% for row in posts %}
-    <div class="SinglePost">
-        <img href={{row.imgPath}}/>
-        <div>
-            <h1>{{row.title}}</h1>
-            <h2>{{row.date}}</h2>
-            <p>{{row.description}}</p>
-            <p>Author: {{row.author}}</p>
+    <div class="row justify-content-md-center">
+        <div class="col col-md-2">
+
+        </div>
+        <div class="col col-lg-6">
+            <div class="card ListPost w3-card-4 post">
+                <div class="card-body SinglePost" id="post_username">
+                    <h5 class="card-title">Post By: {{row.author.username}}</h5>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><b>{{row.title}} </b><br>{{row.date.date()}}</li>
+                    <li class="list-group-item">{{row.description}}</li>
+                    <li id="buttons"><a class='btn btn-default w3-card-4' id='visibility'><i class='material-icons'>visibility</i></a>
+                        {% if (current_user.username ==  row.author.username) or current_user.username == 'admin' %}
+                        <a class='btn btn-default w3-card-4' id='delete1' href='delete/{{row.id}}'><i class='material-icons'>delete</i></a></li>
+                        {% endif %}
+                </ul>
+            </div>
+        </div>
+        <div class="col col-lg-4">
+            <div class="card ListPost w3-card-4" id="img">
+                <div class="card-body SinglePostImg">
+                <img class="card-img-top" src="{{row.imgPath}}" alt="Card image cap">
+                </div>
+            </div>
+        </div>
+        <div class="col col-lg">
+            
         </div>
     </div>
     {% endfor %}
-</div>
+    <a class="btn btn-info" id="createPost" href="createPost">+</a>
+{% else %}
+    <p id="pagenotfound">404</p>
+    <p id="pagenotfound2">Page Not Found</p>
+{% endif %}
+
 {% endblock %}
 

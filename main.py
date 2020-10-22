@@ -39,7 +39,7 @@ class Posts(db.Model, UserMixin):
   description = db.Column(db.String(500), nullable=False) 
   date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
   user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-  imgPath = db.Column(db.String(500), nullable=True)
+  imgPath = db.Column(db.String(2000), nullable=True)
 
   def __repr__(self):
     return f"Post('{self.title}', '{self.description}', '{self.date}', '{self.imgPath}'"
@@ -116,25 +116,47 @@ def deleteUser():
     flash('Successfully deleted user from system!','danger')
     return resp
 
+@app.route("/editUser", methods=['GET','POST'])
+def editUser():
+  form = EditForm()
+  if form.validate_on_submit():
+    x = User.query.filter_by(id=form.id.data).first()
+    x.name = form.name.data
+    x.email = form.email.data
+    x.username = form.username.data
+    x.password = form.password.data
+    x.role = form.role.data
+    db.session.commit()
+    flash(f'Account for {form.username.data} successfully updated!', 'success')
+    return redirect(url_for('users'))
+  return render_template('editUser.html', form=form)
+
 #Add Interface
 @app.route("/posts", methods=['GET','POST'])
 def posts():
   all_posts = Posts.query.all()
-  return render_template("posts.html", posts = all_posts)
+  return render_template("ListPosts.html", posts = all_posts)
 
 #Add Interface
-@app.route("/addPost", methods=['POST'])
-def addPost():
-  if request.method == 'POST':
-    title = request.form['title']
-    description = request.form['description']
-    date = request.date['date']
-    img = request.imgPath['imgPath']
-
-    my_post = Posts(title, description, date, img)
-    db.session.add(my_post)
+@app.route("/createPost", methods=['GET','POST'])
+def createPost():
+  form = CreatePostForm()
+  if form.validate_on_submit():
+    user_id = current_user.id
+    post = Posts(title=form.title.data, description=form.description.data, imgPath=form.imgPath.data, user_id=user_id)
+    db.session.add(post)
     db.session.commit()
-    return redirect(url_for('/'))
+    flash(f'Post created for {current_user.username}, you can view the post under my posts!', 'success')
+    return redirect(url_for('posts'))
+  return render_template('createPost.html', form=form)
+
+@app.route('/delete/<id>', methods = ['GET','POST'])
+def delete(id):
+  targetPost = Posts.query.get(id)
+  db.session.delete(targetPost)
+  db.session.commit()
+  flash("Post Deleted Successfully!","success")
+  return redirect(url_for('posts'))
 
 @app.route("/main")
 def main():
