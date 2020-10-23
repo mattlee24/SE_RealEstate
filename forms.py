@@ -15,8 +15,8 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField('Confirm New User', id="submitbtn-register")
 
 class LoginForm(FlaskForm):
-    email = StringField('Email', validators=[DataRequired(), email()])
-    password = PasswordField('Password', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired(), email()], id="loginemail")
+    password = PasswordField('Password', validators=[DataRequired()], id="loginpass")
     submit = SubmitField('Login', id="submitbtn-login")
 
 class EditForm(FlaskForm):
@@ -40,7 +40,7 @@ class CreatePostForm(FlaskForm):
     title = StringField(validators=[DataRequired()], id="createTitle")
     description = StringField(validators=[DataRequired()], id="createDescription")
     date = DateField(default=datetime.utcnow)
-    imgPath = StringField(validators=[Length(min=0, max=2000)])
+    imgPath = StringField(validators=[Length(min=0, max=2000)], default="https://i1.sndcdn.com/avatars-000617661867-qpt7lq-original.jpg")
     submit = SubmitField('Create', id ="createPostBtn")
 
 class ImgUpload(FlaskForm):

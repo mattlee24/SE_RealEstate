@@ -20,35 +20,35 @@
                 <form method="POST", action="" id="LoginForm">
                     {{ form.hidden_tag() }}
                     <fieldset class="form-group">
-                        <legend class="border-bottom mb-4" id="legend-login">Sign In</legend>
+                        <legend id="legend-login">Sign In</legend><br>
                         <div class="form-group">
                             {% if form.email.errors %}
-                                {{ form.email(class="form-control form-control-lg is-invalid", placeholder="Email") }}
+                                {{ form.email(class=" is-invalid", placeholder="Email") }}
                                 <div class="invalid-feedback">
                                     {% for error in form.email.errors %}
                                         <span>{{ error }}</span>
                                     {% endfor %}
                                 </div>
                             {% else %}
-                                {{ form.email(class="form-control form-control-lg", placeholder="Email") }}
+                                {{ form.email(class="", placeholder="Email") }}
                             {% endif %}
-                        </div>
+                        </div><br>
                         <div class="form-group">
                             {% if form.password.errors %}
-                                {{ form.password(class="form-control form-control-lg is-invalid", placeholder="Password") }}
+                                {{ form.password(class="is-invalid", placeholder="Password") }}
                                 <div class="invalid-feedback">
                                     {% for error in form.password.errors %}
                                         <span>{{ error }}</span>
                                     {% endfor %}
                                 </div>
                             {% else %}
-                                {{ form.password(class="form-control form-control-lg", placeholder="Password") }}
+                                {{ form.password(class="", placeholder="Password") }}
                             {% endif %}
                         </div>
                         <div class="form-group">
                             {{ form.submit(class="btn btn-default") }}
                         </div>
-                        <legend class="border-top mb-4" id="smallPrint-login">Forgot Password? <a href="#">Click Here</a><br>
+                        <legend id="smallPrint-login">Forgot Password? <a href="#">Click Here</a><br>
                                 Don't have an account? <a  href="{{ url_for('register') }}">Click Here</a></legend>
                     </fieldset>
                 </form>
