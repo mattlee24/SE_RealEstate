@@ -31,8 +31,7 @@ class EditForm(FlaskForm):
 
 class EditPostForm(FlaskForm):
     title = StringField(validators=[DataRequired()], id="editTitle")
-    description = StringField(validators=[DataRequired()], id="editDescription")
-    date = DateField(default=datetime.utcnow)
+    description = StringField(validators=[DataRequired(), Length(max=800)], id="editDescription")
     imgPath = StringField(validators=[Length(min=0, max=2000)])
     submit = SubmitField('Update', id ="updatePostBtn")
 

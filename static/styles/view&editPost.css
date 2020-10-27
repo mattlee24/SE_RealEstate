@@ -1,0 +1,193 @@
+.content-section-createPost{
+    width: 95%;
+    margin: auto;
+    margin-top: 50px;
+    text-align: center;
+}
+.SinglePost{
+    height: 20%;
+    padding: 5px;
+}
+#post_username{
+    height: 20%;
+}
+#post_content{
+    height: 100%;
+}
+#cardTitle{
+    height: 20%;
+}
+#cardDescription{
+    height: 80%;
+}
+#smallPrint-createPost{
+    color: white;
+    font-size: 12px;
+}
+#main-section-createPost{
+    display: inline-block;
+    width: 50%;
+    margin: 30px;
+    background-color: #ffe0e0;
+}
+#legend-createPost{
+    color: rgb(117, 117, 117);
+}
+#message{
+    text-align: center;
+}
+#updatePostBtn{
+    background-color: rgba(152,251,152,0.7);
+    color: white;
+    display: block;
+    width: 100%;
+}
+#updatePostBtn:hover{
+    background-color:  rgba(152,251,152,1);
+}
+.card{
+    width: 50%;
+    margin: auto;
+    background-color: #ffe0e0 !important;
+    color: rgb(117, 117, 117) !important;
+    margin: 30px;
+    height: auto;
+}
+#btn{
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    margin-left: 5px;
+    margin-bottom: 5px;
+    background-color: #ffe0e0 !important;
+    color: rgb(117, 117, 117) !important;
+}
+#btn:hover{
+    color: #ffe0e0 !important;
+    background-color: rgb(117, 117, 117) !important;
+}
+img {
+    vertical-align: middle;
+}
+  
+/* Position the image container (needed to position the left and right arrows) */
+.container {
+    position: relative;
+    text-align: center;
+    margin: auto;
+
+}
+
+/* Hide the images by default */
+.mySlides {
+    display: none;
+    width: 400px;
+    height: 350px;
+    margin: 30px;
+    border: 3px solid #ffe0e0;
+}
+
+/* Add a pointer when hovering over the thumbnail images */
+.cursor {
+    cursor: pointer;
+}
+
+/* Next & previous buttons */
+.prev{
+    cursor: pointer;
+    position: absolute;
+    top: 40%;
+    left: 0%;
+    width: auto;
+    padding: 16px;
+    margin-top: -50px;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+    -webkit-user-select: none;
+}
+.next {
+    cursor: pointer;
+    position: absolute;
+    top: 40%;
+    width: auto;
+    padding: 16px;
+    margin-top: -50px;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* Position the "next button" to the right */
+.next {
+    right: 57%;
+    border-radius: 3px 0 0 3px;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.prev:hover{
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.next:hover {
+background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* Number text (1/3 etc) */
+.numbertext {
+    color: #f2f2f2;
+    font-size: 12px;
+    padding: 8px 12px;
+    position: absolute;
+    top: 0;
+}
+
+/* Container for image text */
+.caption-container {
+    text-align: center;
+    background-color: #222;
+    padding: 2px 16px;
+    color: white;
+}
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* Six columns side by side */
+.column {
+    float: left;
+    width: 16.66%;
+}
+
+/* Add a transparency effect for thumnbail images */
+.demo {
+    opacity: 0.4;
+}
+
+.active{
+    opacity: 1;
+}
+.demo:hover {
+    opacity: 1;
+}
+#postImg{
+    height: 100%;
+    width: 100%;
+}
+.row{
+    border: 1px solid #ffe0e0;
+    margin-bottom: 100px;
+    background-color: black;
+}
+.test{
+    display: flex;
+    justify-content: space-between;
+}

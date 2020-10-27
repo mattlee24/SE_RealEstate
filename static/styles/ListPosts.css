@@ -55,6 +55,12 @@ ul {
     border: none;
     margin-bottom: 10px;
 }
+@media screen and (max-width: 1500px) {
+    #createPost{
+        width: 3%;
+        font-size: 20px;
+    }
+}
 #createPost:hover{
     background-color: rgb(117, 117, 117);
     color: #ffe0e0;

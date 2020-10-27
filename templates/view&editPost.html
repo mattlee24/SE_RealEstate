@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>View Post</title>
+<link href="{{ url_for('static', filename='styles/view&editPost.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block body %}
+{% if current_user.is_authenticated %}
+
+<div class="container">
+    <div class="test">
+        <div class="mySlides">
+            <img id="postImg"
+                src="https://images.pexels.com/photos/747964/pexels-photo-747964.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+                style="display: block;">
+        </div>
+
+        <div class="mySlides">
+            <img id="postImg"
+                src="https://images.pexels.com/photos/747964/pexels-photo-747964.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+                style="display: block;">
+        </div>
+
+        <div class="mySlides">
+            <img id="postImg"
+                src="https://images.pexels.com/photos/747964/pexels-photo-747964.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+                style="display: block;">
+        </div>
+
+        <div class="mySlides">
+            <img id="postImg"
+                src="https://images.pexels.com/photos/747964/pexels-photo-747964.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+                style="display: block;">
+        </div>
+
+        <div class="mySlides">
+            <img id="postImg"
+                src="https://images.pexels.com/photos/747964/pexels-photo-747964.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+                style="display: block;">
+        </div>
+
+        <div class="mySlides">
+            <img id="postImg"
+                src="https://images.pexels.com/photos/747964/pexels-photo-747964.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+                style="display: block;">
+        </div>
+
+        {% if current_user.username == targetPost.author.username %}
+        <div class="w3-card-4" id="main-section-createPost">
+            {% block content %}
+            <div class="content-section-createPost">
+                <form method="POST" , action="" id="CreatePostForm">
+                    {{ form.hidden_tag() }}
+                    <fieldset class="form-group">
+                        <legend class="border-bottom mb-4" id="legend-createPost">Edit Post</legend>
+                        <div class="form-group">
+                            {% if form.title.errors %}
+                            {{ form.title(class="form-control form-control-lg is-invalid", value=targetPost.title) }}
+                            <div class="invalid-feedback">
+                                {% for error in form.title.errors %}
+                                <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            {{ form.title(class="form-control form-control-lg", value=targetPost.title) }}
+                            {% endif %}
+                        </div><br>
+                        <div class="form-group">
+                            {% if form.description.errors %}
+                            {{ form.description(class="form-control form-control-lg is-invalid", value=targetPost.description) }}
+                            <div class="invalid-feedback">
+                                {% for error in form.description.errors %}
+                                <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            {{ form.description(class="form-control form-control-lg", value=targetPost.description) }}
+                            {% endif %}
+                        </div><br>
+                        <div class="form-group">
+                            {% if form.imgPath.errors %}
+                            {{ form.imgPath(class="form-control form-control-lg is-invalid", value=targetPost.imgPath) }}
+                            <div class="invalid-feedback">
+                                {% for error in form.imgPath.errors %}
+                                <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            {{ form.imgPath(class="form-control form-control-lg", value=targetPost.imgPath) }}
+                            {% endif %}
+                        </div><br>
+                        <div class="form-group">
+                            {{ form.submit(class="btn btn-default") }}
+                        </div>
+                        <legend class="border-top pt-3" id="smallPrint-createPost"></legend>
+                    </fieldset>
+                </form>
+            </div>
+            {% endblock content %}
+        </div>
+        {% else %}
+        <div class="card ListPost w3-card-4 post">
+            <div class="card-body SinglePost" id="post_username">
+                <h5 class="card-title">Post By: {{targetPost.author.username}}</h5>
+            </div>
+            <ul class="list-group list-group-flush" id="post_content">
+                <li class="list-group-item" id="cardTitle"><b>{{targetPost.title}} </b><br>{{targetPost.date.date()}}</li>
+                <li class="list-group-item" id="cardDescription" >{{targetPost.description}}</li>
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="row">
+        <div class="column">
+            <img class="demo cursor"
+                src="https://images.pexels.com/photos/747964/pexels-photo-747964.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+                style="width:100%" onclick="currentSlide(1)">
+        </div>
+        <div class="column">
+            <img class="demo cursor"
+                src="https://images.pexels.com/photos/747964/pexels-photo-747964.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+                style="width:100%" onclick="currentSlide(2)">
+        </div>
+        <div class="column">
+            <img class="demo cursor"
+                src="https://images.pexels.com/photos/747964/pexels-photo-747964.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+                style="width:100%" onclick="currentSlide(3)">
+        </div>
+        <div class="column">
+            <img class="demo cursor"
+                src="https://images.pexels.com/photos/747964/pexels-photo-747964.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+                style="width:100%" onclick="currentSlide(4)">
+        </div>
+        <div class="column">
+            <img class="demo cursor"
+                src="https://images.pexels.com/photos/747964/pexels-photo-747964.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+                style="width:100%" onclick="currentSlide(5)">
+        </div>
+        <div class="column">
+            <img class="demo cursor"
+                src="https://images.pexels.com/photos/747964/pexels-photo-747964.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+                style="width:100%" onclick="currentSlide(6)">
+        </div>
+    </div>
+</div>
+
+<a class="btn btn-default" id="btn" href="../posts"><i class='material-icons'>undo</i></a>
+{% endif %}
+<script>
+    var slideIndex = 1;
+    showSlides(slideIndex);
+
+    function plusSlides(n) {
+        showSlides(slideIndex += n);
+    }
+
+    function currentSlide(n) {
+        showSlides(slideIndex = n);
+    }
+
+    function showSlides(n) {
+        var i;
+        var slides = document.getElementsByClassName("mySlides");
+        var dots = document.getElementsByClassName("demo");
+        var captionText = document.getElementById("caption");
+        if (n > slides.length) { slideIndex = 1 }
+        if (n < 1) { slideIndex = slides.length }
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+        }
+        for (i = 0; i < dots.length; i++) {
+            dots[i].className = dots[i].className.replace(" active", "");
+        }
+        slides[slideIndex - 1].style.display = "inline-block";
+        dots[slideIndex - 1].className += " active";
+        captionText.innerHTML = dots[slideIndex - 1].alt;
+    }
+</script>
+{% endblock %}

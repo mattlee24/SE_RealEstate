@@ -1,4 +1,4 @@
-/*
+    /*
 
 Primary Colours for Website
 background-color: #ffe0e0;
@@ -60,6 +60,12 @@ Have restyled login form - need to do the same for Register, create post, edit e
         width: 90%;
     }
 }
+@media screen and (max-width: 1500px) {
+    #main-section-register{
+        width: 50%;
+        margin-top: 2px;
+    }
+}
 body{
     background-image: url('https://wallpapercave.com/wp/wp2019296.png');
     background-repeat: no-repeat;
@@ -98,10 +104,16 @@ body{
     margin-top: 15%;
     background-color: #ffe0e0;
     position: relative;
+    border-radius: 25px;
+}
+@media screen and (max-width: 900px) {
+    #main-section-login{
+        width: 50%;
+    }
 }
 @media screen and (max-width: 1500px) {
     #main-section-login{
-        width: 50%;
+        width: 25%;
     }
 }
 #legend-login{
@@ -181,6 +193,11 @@ nav ul{
     margin-top: 50px;
     color: grey;
     background-color: #ffe0e0;
+}
+@media screen and (max-width: 15000px) {
+    .w3-table{
+        width: 80% !important;
+    }
 }
 #edit{
     background-color: rgba(225, 225, 225, 0.5);
@@ -292,4 +309,9 @@ nav ul{
     background-color: #ffe0e0 !important;
     color: rgb(117, 117, 117) !important;
     margin-top: 5px;
+}
+@media screen and (max-width: 1500px) {
+    #card{
+        width: 20%;
+    }
 }

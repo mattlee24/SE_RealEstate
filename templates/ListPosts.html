@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<link href="{{ url_for('static', filename='styles/ListPosts.css') }}" rel="stylesheet" type="text/css"/>
+<link href="{{ url_for('static', filename='styles/listPosts.css') }}" rel="stylesheet" type="text/css"/>
 {% endblock %}
 
 {% block body %}
@@ -29,7 +29,7 @@
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item"><b>{{row.title}} </b><br>{{row.date.date()}}</li>
                     <li class="list-group-item">{{row.description}}</li>
-                    <li id="buttons"><a class='btn btn-default w3-card-4' id='visibility'><i class='material-icons'>visibility</i></a>
+                    <li id="buttons"><a class='btn btn-default w3-card-4' id='visibility' href='viewEditPost/{{row.id}}'><i class='material-icons'>visibility</i></a>
                         {% if (current_user.username ==  row.author.username) or current_user.username == 'admin' %}
                         <a class='btn btn-default w3-card-4' id='delete1' href='delete/{{row.id}}'><i class='material-icons'>delete</i></a></li>
                         {% endif %}

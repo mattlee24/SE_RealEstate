@@ -28,7 +28,6 @@ class User(db.Model, UserMixin):
   password = db.Column(db.String(60), nullable=False)
   role = db.Column(db.String, nullable=False)
   post_user = db.relationship('Posts', backref='author', lazy=True)
-  
 
   def __repr__(self):
     return f"User('{self.name}', '{self.email}', '{self.username}', '{self.password}', '{self.role}')"
@@ -42,7 +41,15 @@ class Posts(db.Model, UserMixin):
   imgPath = db.Column(db.String(2000), nullable=True)
 
   def __repr__(self):
-    return f"Post('{self.title}', '{self.description}', '{self.date}', '{self.imgPath}'"
+    return f"Post('{self.title}', '{self.description}', '{self.date}', '{self.imgPath}')"
+
+class Images(db.Model, UserMixin):
+  id = db.Column(db.Integer, primary_key=True)
+  imgPath = db.Column(db.String(2000), nullable=False)
+  post_id = db.Column(db.Integer, db.ForeignKey('Posts.id'), nullable=False)
+
+  def __repr__(self):
+    return f"Image('{self.imgPath}')"
 
 class UserRating(db.Model, UserMixin):
   id = db.Column(db.Integer, primary_key=True)
@@ -110,7 +117,7 @@ def users():
 def deleteUser():
     reqobj = json.loads(request.data)
     userID = reqobj['IDofUser']
-    x = User.query.filter_by(id=userID).delete()
+    User.query.filter_by(id=userID).delete()
     db.session.commit()
     resp = make_response("", 204)
     flash('Successfully deleted user from system!','danger')
@@ -135,7 +142,7 @@ def editUser():
 @app.route("/posts", methods=['GET','POST'])
 def posts():
   all_posts = Posts.query.all()
-  return render_template("ListPosts.html", posts = all_posts)
+  return render_template("listPosts.html", posts = all_posts)
 
 #Add Interface
 @app.route("/createPost", methods=['GET','POST'])
@@ -150,6 +157,7 @@ def createPost():
     return redirect(url_for('posts'))
   return render_template('createPost.html', form=form)
 
+#delete user
 @app.route('/delete/<id>', methods = ['GET','POST'])
 def delete(id):
   targetPost = Posts.query.get(id)
@@ -158,6 +166,20 @@ def delete(id):
   flash("Post Deleted Successfully!","success")
   return redirect(url_for('posts'))
 
+#view/edit post
+@app.route('/viewEditPost/<id>', methods=['GET','POST'])
+def viewEditPost(id):
+  form = EditPostForm()
+  targetPost = Posts.query.get(id)
+  if form.validate_on_submit():
+    targetPost.title = form.title.data
+    targetPost.description = form.description.data
+    targetPost.imgPath = form.imgPath.data
+    db.session.commit()
+    return redirect('../posts')
+  return render_template('view&editPost.html', targetPost=targetPost, form=form)
+
+#main page once logged in
 @app.route("/main")
 def main():
   return render_template('main.html')
