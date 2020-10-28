@@ -3,6 +3,7 @@
 Primary Colours for Website
 background-color: #ffe0e0;
 color: rgb(117, 117, 117);
+https://wallpapercave.com/wp/wp2019296.png;
 
 Have restyled login form - need to do the same for Register, create post, edit etc etc
 
@@ -67,9 +68,9 @@ Have restyled login form - need to do the same for Register, create post, edit e
     }
 }
 body{
-    background-image: url('https://wallpapercave.com/wp/wp2019296.png');
+    background-image: url('https://www.wallpaperflare.com/static/123/76/21/minimalism-gradient-pink-orange-wallpaper.jpg');
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: initial;
 }
 /* https://gualapackgroup.com/wp-content/uploads/2017/03/business-background.jpg */
 #legend-register{
@@ -133,31 +134,7 @@ body{
 #submitbtn-login:hover{
     background-color:  rgba(152,251,152,1);
 }
-#li_item1 ion-icon{
-    font-size: 1.0em;
-    vertical-align: middle;
-    margin-right: 3px;
-    padding-bottom: 3.5px;
-}
-#li_item2 ion-icon{
-    font-size: 1.0em;
-    vertical-align: middle;
-    margin-right: 3px;
-    padding-bottom: 3.5px;
-}
-#li_item3 ion-icon{
-    font-size: 1.0em;
-    vertical-align: middle;
-    margin-right: 3px;
-    padding-bottom: 3.5px;
-}
-#li_item4 ion-icon{
-    font-size: 1.0em;
-    vertical-align: middle;
-    margin-right: 3px;
-    padding-bottom: 3.5px;
-}
-#li_item5 ion-icon{
+ion-icon{
     font-size: 1.0em;
     vertical-align: middle;
     margin-right: 3px;
@@ -165,7 +142,7 @@ body{
 }
 nav ul li a{
     color: grey;
-    background-color: rgba(225, 225, 225, 0.1);
+    background-color: #ffe0e0;
     display: block;
     text-align: center;
     width: auto;
@@ -186,11 +163,14 @@ nav ul{
 #navSection{
     justify-content: space-between;
     background-color: #ffe0e0;
+    position: fixed;
+    width: 100%;
+    height: auto;
 }
 .w3-table{
     width: 50% !important;
     margin: auto;
-    margin-top: 50px;
+    margin-top: 100px;
     color: grey;
     background-color: #ffe0e0;
 }
@@ -303,15 +283,24 @@ nav ul{
     margin-bottom: 50px;
     color: tomato;
 }
-#card{
-    width: 15%;
-    margin-left: 5px;
-    background-color: #ffe0e0 !important;
-    color: rgb(117, 117, 117) !important;
-    margin-top: 5px;
+#title{
+    text-align: center;
+    margin-top: 130px;
+    font-size: 100px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    color: white;
 }
-@media screen and (max-width: 1500px) {
-    #card{
-        width: 20%;
-    }
+#mainPara{
+    text-align: center;
+    background-color: #ffe0e0;
+    width: 100%;
+    height: 1000px;
+    font-size: 50px;
+    margin-bottom: 100px;
+    color: white;
+}
+#title2{
+    text-align: center;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    color: white;
 }

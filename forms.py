@@ -42,5 +42,6 @@ class CreatePostForm(FlaskForm):
     imgPath = StringField(validators=[Length(min=0, max=2000)], default="https://i1.sndcdn.com/avatars-000617661867-qpt7lq-original.jpg")
     submit = SubmitField('Create', id ="createPostBtn")
 
-class ImgUpload(FlaskForm):
-    upload = FileField('image', validators=[FileRequired(), FileAllowed(IMAGES,'Images only!')])
+class uploadImageForm(FlaskForm):
+    image = FileField('image', validators=[FileRequired(), FileAllowed(IMAGES,'Images only!')])
+    imgPath = StringField(validators=[DataRequired()], id="uploadImgPath")

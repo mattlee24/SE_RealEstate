@@ -8,17 +8,18 @@
             </li>
             {% if current_user.role == 'Administrator' %}
                 <li id="li_item2" class="nav-item">
-                    <a href="users" class="btn btn-default"><ion-icon name="person"></ion-icon>Users</a></li>
+                    <a href="users" class="btn btn-default"><ion-icon name="person"></ion-icon>Users</a>
                 </li>
             {% endif %}
             <li id="li_item4" class="nav-item">
-                <a href="posts" class="btn btn-default"><ion-icon name="document"></ion-icon>Posts</a></li>
+                <a href="posts" class="btn btn-default"><ion-icon name="document"></ion-icon>Posts</a>
             </li>
             <li id="li_item3" class="nav-item">
-                <a href="logout" class="btn btn-default"><ion-icon name="backspace"></ion-icon>Logout</a></li>
+                <a href="logout" class="btn btn-default"><ion-icon name="backspace"></ion-icon>Logout</a>
             </li>
         </ul>
         <form id="searchbar" class="form-inline my-2 my-lg-0">
+            <a href="#" class="btn btn-default"><ion-icon name="person"></ion-icon>My Account</a>
             <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button> 
         </form>

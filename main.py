@@ -4,17 +4,21 @@ from forms import *
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, UserMixin, login_user, current_user, logout_user
+from werkzeug.utils import secure_filename
 import json, os, random, sqlite3
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '6ce3cac9d9f1b9fd29ff5cfa9060401f'
 app.config['UPLOADED_IMAGES_DEST'] = 'scripts/uploads/images'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
+app.config['CELERY_BROKER_URL'] = ''
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app) 
 login_manager = LoginManager(app)
 images = UploadSet('images', IMAGES)
 configure_uploads(app, images)
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -43,9 +47,10 @@ class Posts(db.Model, UserMixin):
   def __repr__(self):
     return f"Post('{self.title}', '{self.description}', '{self.date}', '{self.imgPath}')"
 
-class Images(db.Model, UserMixin):
+class Img(db.Model, UserMixin):
   id = db.Column(db.Integer, primary_key=True)
-  imgPath = db.Column(db.String(2000), nullable=False)
+  name = db.Column(db.Text, nullable=False)
+  imgType = db.Column(db.Text, nullable = False)
   post_id = db.Column(db.Integer, db.ForeignKey('Posts.id'), nullable=False)
 
   def __repr__(self):
@@ -176,8 +181,30 @@ def viewEditPost(id):
     targetPost.description = form.description.data
     targetPost.imgPath = form.imgPath.data
     db.session.commit()
-    return redirect('../posts')
+    flash(f'Post successfully updated!', 'success')
   return render_template('view&editPost.html', targetPost=targetPost, form=form)
+
+@app.route('/uploadImg', methods=['GET','POST'])
+def upload():
+  pic = request.files['pic']
+  if not pic:
+    return 'No pic uploaded', 400
+  filename = secure_filename(pic.filename)
+  mimetype = pic.imgType
+  img = Img(img.pic.read(), mimetype=mimetype, name=filename)
+  db.session.add(img)
+  db.session.commit()
+  flash(f'Image uploaded!', 'success')
+  return render_template('uploadImg.html', imgData = pic)
+
+#Get Post Images
+@app.route('/getImages/<imgId>', methods=['POST'])
+def getImages(imgId):
+  conn = sqlite3.connect('Users.db')
+  cur = conn.cursor()
+  cur.execute("SELECT * FROM Img where post_id == "+ imgId)
+  imagedata = cur.fetchall()
+  return render_template('test.html', imageData = imagedata)
 
 #main page once logged in
 @app.route("/main")

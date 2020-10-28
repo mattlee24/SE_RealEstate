@@ -1,4 +1,21 @@
 #li_item1 a{
     color: #ffe0e0;
     background-color: rgb(117, 117, 117);
-}   
+} 
+form a{
+    color: grey;
+    background-color: #ffe0e0;
+    display: block;
+    text-align: center;
+    width: auto;
+    text-decoration: none; 
+}
+form a:hover{
+    color: #ffe0e0;
+    background-color: rgb(117, 117, 117);
+}
+body{
+    background-image: url('https://images2.alphacoders.com/546/thumb-1920-546678.jpg') !important;
+    background-repeat: no-repeat !important;
+    background-size: initial !important;
+}

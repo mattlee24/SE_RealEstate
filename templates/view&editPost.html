@@ -8,6 +8,16 @@
 {% block body %}
 {% if current_user.is_authenticated %}
 
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }}" id="message">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
 <div class="container">
     <div class="test">
         <div class="mySlides">
@@ -18,7 +28,7 @@
 
         <div class="mySlides">
             <img id="postImg"
-                src="https://images.pexels.com/photos/747964/pexels-photo-747964.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+                src="https://cdn.wallpapersafari.com/44/3/9sVOez.jpg"
                 style="display: block;">
         </div>
 
@@ -30,7 +40,7 @@
 
         <div class="mySlides">
             <img id="postImg"
-                src="https://images.pexels.com/photos/747964/pexels-photo-747964.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+                src="https://cdn.wallpapersafari.com/44/3/9sVOez.jpg"
                 style="display: block;">
         </div>
 
@@ -42,7 +52,7 @@
 
         <div class="mySlides">
             <img id="postImg"
-                src="https://images.pexels.com/photos/747964/pexels-photo-747964.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+                src="https://cdn.wallpapersafari.com/44/3/9sVOez.jpg"
                 style="display: block;">
         </div>
 
@@ -120,7 +130,7 @@
         </div>
         <div class="column">
             <img class="demo cursor"
-                src="https://images.pexels.com/photos/747964/pexels-photo-747964.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+                src="https://cdn.wallpapersafari.com/44/3/9sVOez.jpg"
                 style="width:100%" onclick="currentSlide(2)">
         </div>
         <div class="column">
@@ -130,7 +140,7 @@
         </div>
         <div class="column">
             <img class="demo cursor"
-                src="https://images.pexels.com/photos/747964/pexels-photo-747964.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+                src="https://cdn.wallpapersafari.com/44/3/9sVOez.jpg"
                 style="width:100%" onclick="currentSlide(4)">
         </div>
         <div class="column">
@@ -140,7 +150,7 @@
         </div>
         <div class="column">
             <img class="demo cursor"
-                src="https://images.pexels.com/photos/747964/pexels-photo-747964.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+                src="https://cdn.wallpapersafari.com/44/3/9sVOez.jpg"
                 style="width:100%" onclick="currentSlide(6)">
         </div>
     </div>
