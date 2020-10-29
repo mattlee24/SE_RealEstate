@@ -1,3 +1,7 @@
+#li_item4 a{
+    color: #ffe0e0;
+    background-color: rgb(117, 117, 117);
+} 
 #MainDIV{
     margin-top: 5px;
     margin-bottom: 5px;
@@ -22,10 +26,6 @@
     color: rgb(117, 117, 117);
     margin-top: 5px !important;
 }
-#li_item1 a{
-    color: #ffe0e0;
-    background-color: rgb(117, 117, 117);
-}  
 #img{
     width: 35%;
     margin-top: 5px !important;
@@ -41,7 +41,7 @@ ul {
     margin-bottom: 4px;
     width: 100%;
 }
-#buttons{
+#button{
     right: 0;
 }
 #createPost{
@@ -78,11 +78,11 @@ ul {
     background-color: rgb(117, 117, 117) !important;
     color: red !important;
 }
-#visibility{
+#create{
     background-color: #ffe0e0 !important;
     color:  rgb(117, 117, 117) !important;
 }
-#visibility:hover{
+#create:hover{
     color: #ffe0e0 !important;
     background-color:  rgb(117, 117, 117) !important;
 }

@@ -55,61 +55,6 @@
                 src="https://cdn.wallpapersafari.com/44/3/9sVOez.jpg"
                 style="display: block;">
         </div>
-
-        {% if current_user.username == targetPost.author.username %}
-        <div class="w3-card-4" id="main-section-createPost">
-            {% block content %}
-            <div class="content-section-createPost">
-                <form method="POST" , action="" id="CreatePostForm">
-                    {{ form.hidden_tag() }}
-                    <fieldset class="form-group">
-                        <legend class="border-bottom mb-4" id="legend-createPost">Edit Post</legend>
-                        <div class="form-group">
-                            {% if form.title.errors %}
-                            {{ form.title(class="form-control form-control-lg is-invalid", value=targetPost.title) }}
-                            <div class="invalid-feedback">
-                                {% for error in form.title.errors %}
-                                <span>{{ error }}</span>
-                                {% endfor %}
-                            </div>
-                            {% else %}
-                            {{ form.title(class="form-control form-control-lg", value=targetPost.title) }}
-                            {% endif %}
-                        </div><br>
-                        <div class="form-group">
-                            {% if form.description.errors %}
-                            {{ form.description(class="form-control form-control-lg is-invalid", value=targetPost.description) }}
-                            <div class="invalid-feedback">
-                                {% for error in form.description.errors %}
-                                <span>{{ error }}</span>
-                                {% endfor %}
-                            </div>
-                            {% else %}
-                            {{ form.description(class="form-control form-control-lg", value=targetPost.description) }}
-                            {% endif %}
-                        </div><br>
-                        <div class="form-group">
-                            {% if form.imgPath.errors %}
-                            {{ form.imgPath(class="form-control form-control-lg is-invalid", value=targetPost.imgPath) }}
-                            <div class="invalid-feedback">
-                                {% for error in form.imgPath.errors %}
-                                <span>{{ error }}</span>
-                                {% endfor %}
-                            </div>
-                            {% else %}
-                            {{ form.imgPath(class="form-control form-control-lg", value=targetPost.imgPath) }}
-                            {% endif %}
-                        </div><br>
-                        <div class="form-group">
-                            {{ form.submit(class="btn btn-default") }}
-                        </div>
-                        <legend class="border-top pt-3" id="smallPrint-createPost"></legend>
-                    </fieldset>
-                </form>
-            </div>
-            {% endblock content %}
-        </div>
-        {% else %}
         <div class="card ListPost w3-card-4 post">
             <div class="card-body SinglePost" id="post_username">
                 <h5 class="card-title">Post By: {{targetPost.author.username}}</h5>
@@ -119,7 +64,6 @@
                 <li class="list-group-item" id="cardDescription" >{{targetPost.description}}</li>
             </ul>
         </div>
-        {% endif %}
     </div>
 
     <div class="row">
@@ -156,7 +100,7 @@
     </div>
 </div>
 
-<a class="btn btn-default" id="btn" href="../posts"><i class='material-icons'>undo</i></a>
+<a class="btn btn-default" id="btn" href="../main"><i class='material-icons'>undo</i></a>
 {% endif %}
 <script>
     var slideIndex = 1;

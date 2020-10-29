@@ -18,6 +18,7 @@ bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
 images = UploadSet('images', IMAGES)
 configure_uploads(app, images)
+viewTimes = 0
 
 
 @login_manager.user_loader
@@ -39,18 +40,19 @@ class User(db.Model, UserMixin):
 class Posts(db.Model, UserMixin):
   id = db.Column(db.Integer, primary_key=True)
   title = db.Column(db.String(30), nullable=False)
-  description = db.Column(db.String(500), nullable=False) 
+  description = db.Column(db.String(500), nullable=True) 
   date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+  imgPath = db.Column(db.String(2048), nullable=True)
   user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-  imgPath = db.Column(db.String(2000), nullable=True)
+  #post_images = db.relationship('Img', backref='postSource', lazy=True)
 
   def __repr__(self):
     return f"Post('{self.title}', '{self.description}', '{self.date}', '{self.imgPath}')"
 
 class Img(db.Model, UserMixin):
   id = db.Column(db.Integer, primary_key=True)
-  name = db.Column(db.Text, nullable=False)
-  imgType = db.Column(db.Text, nullable = False)
+  name = db.Column(db.String(50), nullable=False)
+  imgType = db.Column(db.String(5), nullable = False)
   post_id = db.Column(db.Integer, db.ForeignKey('Posts.id'), nullable=False)
 
   def __repr__(self):
@@ -59,7 +61,7 @@ class Img(db.Model, UserMixin):
 class UserRating(db.Model, UserMixin):
   id = db.Column(db.Integer, primary_key=True)
   user_rating = db.Column(db.Integer, nullable=False)
-  user_rating_description = db.Column(db.String(200), nullable=False)
+  user_rating_description = db.Column(db.String(200), nullable=True)
   user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
   
   def __repr__(self):
@@ -68,8 +70,8 @@ class UserRating(db.Model, UserMixin):
 class PostsRating(db.Model, UserMixin):
   id = db.Column(db.Integer, primary_key=True)
   post_rating = db.Column(db.Integer, nullable=False)
-  post_rating_description = db.Column(db.String(200), nullable=False)
-  user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+  post_rating_description = db.Column(db.String(200), nullable=True)
+  post_id = db.Column(db.Integer, db.ForeignKey('Posts.id'), nullable=False)
 
   def __repr__(self):
     return f"PostsRating('{self.post_rating}', '{self.post_rating_description}', '{self.user_id}')"
@@ -144,10 +146,10 @@ def editUser():
   return render_template('editUser.html', form=form)
 
 #Add Interface
-@app.route("/posts", methods=['GET','POST'])
+@app.route("/myposts", methods=['GET','POST'])
 def posts():
-  all_posts = Posts.query.all()
-  return render_template("listPosts.html", posts = all_posts)
+  my_posts = Posts.query.filter_by(user_id=current_user.id)
+  return render_template("myposts.html", posts=my_posts)
 
 #Add Interface
 @app.route("/createPost", methods=['GET','POST'])
@@ -159,20 +161,26 @@ def createPost():
     db.session.add(post)
     db.session.commit()
     flash(f'Post created for {current_user.username}, you can view the post under my posts!', 'success')
-    return redirect(url_for('posts'))
+    return redirect(url_for('main'))
   return render_template('createPost.html', form=form)
 
-#delete user
+#delete post
 @app.route('/delete/<id>', methods = ['GET','POST'])
 def delete(id):
   targetPost = Posts.query.get(id)
   db.session.delete(targetPost)
   db.session.commit()
   flash("Post Deleted Successfully!","success")
-  return redirect(url_for('posts'))
+  return redirect(url_for('main'))
 
-#view/edit post
-@app.route('/viewEditPost/<id>', methods=['GET','POST'])
+#view post
+@app.route('/viewPost/<id>', methods=['GET','POST'])
+def viewPost(id):
+  targetPost = Posts.query.get(id)
+  return render_template('viewPost.html', targetPost=targetPost)
+
+#edit post
+@app.route('/EditPost/<id>', methods=['GET','POST'])
 def viewEditPost(id):
   form = EditPostForm()
   targetPost = Posts.query.get(id)
@@ -182,7 +190,7 @@ def viewEditPost(id):
     targetPost.imgPath = form.imgPath.data
     db.session.commit()
     flash(f'Post successfully updated!', 'success')
-  return render_template('view&editPost.html', targetPost=targetPost, form=form)
+  return render_template('myposts.html', targetPost=targetPost, form=form)
 
 @app.route('/uploadImg', methods=['GET','POST'])
 def upload():
@@ -207,6 +215,7 @@ def getImages(imgId):
   return render_template('test.html', imageData = imagedata)
 
 #main page once logged in
-@app.route("/main")
+@app.route("/main", methods=['GET','POST'])
 def main():
-  return render_template('main.html')
+  all_posts = Posts.query.all()
+  return render_template("listPosts.html", posts = all_posts)
