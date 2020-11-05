@@ -8,36 +8,14 @@
 {% block body %}
 {% include 'navbar.html' %}
 
-<!-- <div class="testContainer">
-    {% for img in imageData %}
-    <div >
-        <img src="static/images/{{ img.imgPath }}" >
-        <p>Author ID: {{ img.post_id }}</p>
-    </div>
 
-    {% endfor %}
-    
-</div> -->
-<div>
-    <form action="http://localhost:5000/upload" enctype="multipart/form-data" method="POST">
-        <input type="file" name="pic" />
-        <input type="submit" value="Upload Image" />
-    </form>
-</div>
 
-<script>
-    document.addEventListener('submit', e => {
-        const form = e.target;
-
-        fetch(form.action,{
-            method: form.method,
-            body: new FormData(form)
-        })
-
-        e.preventDefault();
-    });
-</script>
-
+        <div>
+            <form method="POST" action="/uploadImg/1" enctype="multipart/form-data" id="UploadImageForm">
+                <input type="file" id="imageFile" placeholder="Choose an Image">
+                <input type="submit" value="Upload Image" id="submitImg">
+            </form>
+        </div> 
 {% endblock %}
 
 

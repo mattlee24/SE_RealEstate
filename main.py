@@ -7,23 +7,30 @@ from flask_login import LoginManager, UserMixin, login_user, current_user, logou
 from werkzeug.utils import secure_filename
 import json, os, random, sqlite3
 
-
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '6ce3cac9d9f1b9fd29ff5cfa9060401f'
-app.config['UPLOADED_IMAGES_DEST'] = 'scripts/uploads/images'
+app.config['IMAGE_UPLOADS'] = 'C:/Users/Matt/Desktop/SE_RealEstate/static/uploads/images'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
-app.config['CELERY_BROKER_URL'] = ''
+app.config['ALLOWED_IMAGE_EXTENSIONS'] = ["PNG", "JPG", "JPEG", "GIF"]
+
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app) 
 login_manager = LoginManager(app)
-images = UploadSet('images', IMAGES)
-configure_uploads(app, images)
+#images = UploadSet('images', IMAGES)
 viewTimes = 0
-
 
 @login_manager.user_loader
 def load_user(user_id):
   return User.query.get(int(user_id))
+
+def allowed_image(filename):
+  if not "." in filename:
+    return False
+  ext = filename.rsplit(".",1)[1]
+  if ext.upper() in app.config['ALLOWED_IMAGE_EXTENSIONS']:
+    return True
+  else:
+    return False
 
 class User(db.Model, UserMixin):
   id = db.Column(db.Integer, primary_key=True)
@@ -33,48 +40,44 @@ class User(db.Model, UserMixin):
   password = db.Column(db.String(60), nullable=False)
   role = db.Column(db.String, nullable=False)
   post_user = db.relationship('Posts', backref='author', lazy=True)
+  avatar = db.Column(db.String(2048), nullable=True, default="https://s3.amazonaws.com/37assets/svn/765-default-avatar.png")
+  rating = db.Column(db.Integer, nullable=False, default=1)
+  comment_user = db.relationship('Comment', backref='author', lazy=True)
 
   def __repr__(self):
-    return f"User('{self.name}', '{self.email}', '{self.username}', '{self.password}', '{self.role}')"
+    return f"User('{self.name}', '{self.email}', '{self.username}', '{self.password}', '{self.role}','{self.avatar}', '{self.rating}')"
 
 class Posts(db.Model, UserMixin):
   id = db.Column(db.Integer, primary_key=True)
   title = db.Column(db.String(30), nullable=False)
   description = db.Column(db.String(500), nullable=True) 
   date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-  imgPath = db.Column(db.String(2048), nullable=True)
   user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-  #post_images = db.relationship('Img', backref='postSource', lazy=True)
+  rating = db.Column(db.Integer, nullable=False, default=1)
+  displayImg = db.Column(db.String(2048), nullable=False, default="https://i1.sndcdn.com/avatars-000617661867-qpt7lq-original.jpg")
+  comment_post = db.relationship('Comment', backref='poster', lazy=True)
+  img_post = db.relationship('Img', backref='imager', lazy=True)
 
   def __repr__(self):
-    return f"Post('{self.title}', '{self.description}', '{self.date}', '{self.imgPath}')"
+    return f"Post('{self.title}', '{self.description}', '{self.date}', '{self.avatar}', '{self.rating}')"
 
 class Img(db.Model, UserMixin):
   id = db.Column(db.Integer, primary_key=True)
-  name = db.Column(db.String(50), nullable=False)
-  imgType = db.Column(db.String(5), nullable = False)
-  post_id = db.Column(db.Integer, db.ForeignKey('Posts.id'), nullable=False)
+  name = db.Column(db.String, nullable=False)
+  imgPath = db.Column(db.String, nullable=False)
+  post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), nullable=False)
 
-  def __repr__(self):
-    return f"Image('{self.imgPath}')"
-
-class UserRating(db.Model, UserMixin):
+class Comment(db.Model, UserMixin):
   id = db.Column(db.Integer, primary_key=True)
-  user_rating = db.Column(db.Integer, nullable=False)
-  user_rating_description = db.Column(db.String(200), nullable=True)
+  title = db.Column(db.String(50), nullable=False)
+  content = db.Column(db.String(500), nullable=False)
+  rating = db.Column(db.Integer, nullable=False)
+  commentType = db.Column(db.String(4), nullable=False)
   user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-  
-  def __repr__(self):
-    return f"UserRating('{self.user_rating_id}','{self.user_rating}','{self.user_rating_description}','{self.user_id}')"
-
-class PostsRating(db.Model, UserMixin):
-  id = db.Column(db.Integer, primary_key=True)
-  post_rating = db.Column(db.Integer, nullable=False)
-  post_rating_description = db.Column(db.String(200), nullable=True)
-  post_id = db.Column(db.Integer, db.ForeignKey('Posts.id'), nullable=False)
+  post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), nullable=False)
 
   def __repr__(self):
-    return f"PostsRating('{self.post_rating}', '{self.post_rating_description}', '{self.user_id}')"
+    return f"Comment('{self.title}', '{self.content}', '{self.rating}')"
 
 @app.route("/", methods=['GET','POST'])
 def login():
@@ -98,18 +101,11 @@ def logout():
 def register():
   form = RegistrationForm()
   if form.validate_on_submit():
-    if current_user.is_authenticated:
-      user = User(name=form.name.data, email=form.email.data, username=form.username.data, password=form.password.data, role=form.role.data)
-      db.session.add(user)
-      db.session.commit()
-      flash(f'Account created for {form.username.data}, they can now log in!', 'success')
-      return redirect(url_for('login'))
-    else:
-      user = User(name=form.name.data, email=form.email.data, username=form.username.data, password=form.password.data, role=form.role.data)
-      db.session.add(user)
-      db.session.commit()
-      flash(f'Account created for {form.username.data}, they can now log in!', 'success')
-      return redirect(url_for('login'))
+    user = User(name=form.name.data, email=form.email.data, username=form.username.data, password=form.password.data, role=form.role.data)
+    db.session.add(user)
+    db.session.commit()
+    flash(f'Account created for {form.username.data}, they can now log in!', 'success')
+    return redirect(url_for('login'))
   return render_template('register.html', form=form)
 
 @app.route("/users", methods=['GET','POST','DELETE'])
@@ -157,7 +153,7 @@ def createPost():
   form = CreatePostForm()
   if form.validate_on_submit():
     user_id = current_user.id
-    post = Posts(title=form.title.data, description=form.description.data, imgPath=form.imgPath.data, user_id=user_id)
+    post = Posts(title=form.title.data, description=form.description.data, displayImg=form.displayImg.data, user_id=user_id)
     db.session.add(post)
     db.session.commit()
     flash(f'Post created for {current_user.username}, you can view the post under my posts!', 'success')
@@ -192,22 +188,39 @@ def viewEditPost(id):
     flash(f'Post successfully updated!', 'success')
   return render_template('myposts.html', targetPost=targetPost, form=form)
 
-@app.route('/uploadImg', methods=['GET','POST'])
-def upload():
-  pic = request.files['pic']
-  if not pic:
-    return 'No pic uploaded', 400
-  filename = secure_filename(pic.filename)
-  mimetype = pic.imgType
-  img = Img(img.pic.read(), mimetype=mimetype, name=filename)
-  db.session.add(img)
-  db.session.commit()
-  flash(f'Image uploaded!', 'success')
-  return render_template('uploadImg.html', imgData = pic)
+@app.route('/uploadImg/<id>', methods=['GET','POST'])
+def upload(id):
+  
+  if request.method == "POST":
+    if request.files:
+      image = request.files["imageFile"]
+      filename = image.filename
+      
+      if image.filename == "":
+        print("Image must have a filename!")
+        return redirect(request.url)
+
+      if not allowed_image(image.filename):
+        print("That image extension is not allowed!")
+        return redirect(request.url)
+
+      else:
+        filename = secure_filename(image.filename)
+        
+      pathing="static/uploads/images"+filename
+      image.save(os.path.join(app.config["IMAGE_UPLOADS"], filename))
+      
+      img = Img(name=filename, imgPath=pathing, post_id=id)
+      db.session.add(img)
+      db.session.commit()
+      flash(f'Image uploaded!', 'success')
+      return redirect(url_for('main'))
+
+  return render_template('uploadImg.html')
 
 #Get Post Images
-@app.route('/getImages/<imgId>', methods=['POST'])
-def getImages(imgId):
+@app.route('/getImages/<id>', methods=['GET','POST'])
+def getImages(id):
   conn = sqlite3.connect('Users.db')
   cur = conn.cursor()
   cur.execute("SELECT * FROM Img where post_id == "+ imgId)

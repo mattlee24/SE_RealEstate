@@ -32,16 +32,18 @@ class EditForm(FlaskForm):
 class EditPostForm(FlaskForm):
     title = StringField(validators=[DataRequired()], id="editTitle")
     description = StringField(validators=[DataRequired(), Length(max=800)], id="editDescription")
-    imgPath = StringField(validators=[Length(min=0, max=2000)])
+    displayImg = StringField(validators=[Length(min=0, max=2000)])
     submit = SubmitField('Update', id ="updatePostBtn")
 
 class CreatePostForm(FlaskForm):
     title = StringField(validators=[DataRequired()], id="createTitle")
     description = StringField(validators=[DataRequired()], id="createDescription")
     date = DateField(default=datetime.utcnow)
-    imgPath = StringField(validators=[Length(min=0, max=2000)], default="https://i1.sndcdn.com/avatars-000617661867-qpt7lq-original.jpg")
+    displayImg = StringField(validators=[Length(min=0, max=2048)])
     submit = SubmitField('Create', id ="createPostBtn")
 
 class uploadImageForm(FlaskForm):
-    image = FileField('image', validators=[FileRequired(), FileAllowed(IMAGES,'Images only!')])
-    imgPath = StringField(validators=[DataRequired()], id="uploadImgPath")
+    image = FileField('image', validators=[FileRequired(), FileAllowed(IMAGES,'Images only!')], id="imageFile")
+    name = StringField(id="imageName", default="blueOrange")
+    imgPath = StringField(id="uploadImgPath", default="static/uploads/images/blueOrange")
+    submit = SubmitField('Upload Image', id="submitImg")

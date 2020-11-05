@@ -27,6 +27,7 @@
                         <th>Username</th>
                         <th>Password</th>
                         <th>Role</th>
+                        <th>Avatar</th>
                         <th>Actions</th>
                     </thead>
                     <tbody>
@@ -38,6 +39,7 @@
                                     <td>{{ user[3] }}</td>
                                     <td>{{ user[4] }}</td>
                                     <td>{{ user[5] }}</td>
+                                    <td><img id="image" src="{{ user[6] }}" class="w3-circle"></td>
                                     <td><a href="editUser" class='btn btn-default w3-card-4' id='edit'><i class='material-icons'>edit</i></a><a class='btn btn-default w3-card-4' id='delete' onclick="displayYesNo()"><i class='material-icons'>delete</i></a></td>
                                 </tr>
                         {% endfor %}

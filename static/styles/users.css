@@ -2,3 +2,12 @@
     color: #ffe0e0;
     background-color: rgb(117, 117, 117);
 }   
+#image{
+    width: 60px;
+    height: 60px;
+}
+td{
+    display: table-cell;
+    vertical-align: middle !important;
+    height: auto;
+}

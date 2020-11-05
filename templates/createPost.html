@@ -40,15 +40,15 @@
                                 {% endif %}
                             </div><br>
                             <div class="form-group">
-                                {% if form.imgPath.errors %}
-                                    {{ form.imgPath(class="form-control form-control-lg is-invalid", placeholder="https://cdn2.iconfinder.com/data/icons/basic-4/512/user-512.png") }}
+                                {% if form.displayImg.errors %}
+                                    {{ form.displayImg(class="form-control form-control-lg is-invalid", placeholder="Display Image") }}
                                     <div class="invalid-feedback">
-                                        {% for error in form.imgPath.errors %}
+                                        {% for error in form.displayImg.errors %}
                                             <span>{{ error }}</span>
                                         {% endfor %}
                                     </div>
                                 {% else %}
-                                    {{ form.imgPath(class="form-control form-control-lg", placeholder="https://cdn2.iconfinder.com/data/icons/basic-4/512/user-512.png") }}
+                                    {{ form.displayImg(class="form-control form-control-lg", placeholder="Display Image") }}
                                 {% endif %}
                             </div><br>
                             <div class="form-group">
