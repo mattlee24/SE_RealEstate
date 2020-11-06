@@ -1,0 +1,77 @@
+class User(db.Model, UserMixin):
+  id = db.Column(db.Integer, primary_key=True)
+  name = db.Column(db.String, nullable=False)
+  email = db.Column(db.String, nullable=False) 
+  username = db.Column(db.String(20), unique=True, nullable=False)
+  password = db.Column(db.String(60), nullable=False)
+  role = db.Column(db.String, nullable=False)
+  post_user = db.relationship('Posts', backref='author', lazy=True)
+  avatar = db.Column(db.String(2048), nullable=True, default="https://s3.amazonaws.com/37assets/svn/765-default-avatar.png")
+  rating = db.Column(db.Integer, nullable=False, default=1)
+  comment_user = db.relationship('Comment', backref='sender', lazy=True)
+  report_user = db.relationship('Report', backref='submitter', Lazy=True)
+  request_user = db.relationship('Request', backref='requester', Lazy=True)
+
+  def __repr__(self):
+    return f"User('{self.name}', '{self.email}', '{self.username}', '{self.password}', '{self.role}','{self.avatar}', '{self.rating}')"
+
+class Posts(db.Model, UserMixin):
+  id = db.Column(db.Integer, primary_key=True)
+  title = db.Column(db.String(30), nullable=False)
+  description = db.Column(db.String(500), nullable=True) 
+  date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+  user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+  rating = db.Column(db.Integer, nullable=False, default=1)
+  displayImg = db.Column(db.String(2048), nullable=False, default="https://i1.sndcdn.com/avatars-000617661867-qpt7lq-original.jpg")
+  comment_post = db.relationship('Comment', backref='poster', lazy=True)
+  img_post = db.relationship('Img', backref='imager', lazy=True)
+  
+
+  def __repr__(self):
+    return f"Post('{self.title}', '{self.description}', '{self.date}', '{self.avatar}', '{self.rating}')"
+
+class Img(db.Model, UserMixin):
+  id = db.Column(db.Integer, primary_key=True)
+  name = db.Column(db.String, nullable=False)
+  imgPath = db.Column(db.String, nullable=False)
+  post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), nullable=False)
+
+class Comment(db.Model, UserMixin):
+  id = db.Column(db.Integer, primary_key=True)
+  title = db.Column(db.String(50), nullable=False)
+  content = db.Column(db.String(500), nullable=False)
+  rating = db.Column(db.Integer, nullable=False)
+  commentType = db.Column(db.String(4), nullable=False)
+  user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+  post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), nullable=False)
+
+  def __repr__(self):
+    return f"Comment('{self.title}', '{self.content}', '{self.rating}')"
+
+class Report(db.Model, UserMixin):
+  id = db.Column(db.Integer, primary_key=True)
+  category = db.Column(db.String(20), nullable=False)
+  email = db.Column(db.String(), nullable=False)
+  description = db.Column(db.String(300), nullable=False)
+  user_id = db.Column(db.Integer(), ForeignKey(), nullable=False)
+
+  def __repr__(self):
+    return f"Report('{self.category}','{self.description}')"
+
+class Request(db.Model, UserMixin):
+  id = db.Column(db.Integer, primary_key=True)
+  action = db.Column(db.String(10), nullable=False)
+  message = db.Column(db.String(300),nullable=False)
+  user_id = db.Column(db.Integer(), ForeignKey(), nullable=False)
+
+  def __repr__(self):
+    return f"Request('{self.action}', '{self.message}')"
+
+class Message(db.Model, UserMixin):
+  id = db.Column(db.Integer, primary_key=True)
+  message = db.Column(db.String(500), nullable=False)
+  Sender = db.Column(db.Integer, ForeignKey('user.id'), nullable=False)
+  Receiver = db.Column(db.String, ForeignKey('user.id'), nullable=False)
+
+  def __repr__(self):
+    

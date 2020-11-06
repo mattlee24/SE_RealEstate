@@ -7,12 +7,9 @@
 
 {% block body %}
 {% include 'navbar.html' %}
-
-
-
         <div>
-            <form method="POST" action="/uploadImg/1" enctype="multipart/form-data" id="UploadImageForm">
-                <input type="file" id="imageFile" placeholder="Choose an Image">
+            <form method="POST" action="/uploadImg/{{}}" enctype="multipart/form-data" id="UploadImageForm">
+                <input type="file" name="imageFile" id="imageFile" placeholder="Choose an Image">
                 <input type="submit" value="Upload Image" id="submitImg">
             </form>
         </div> 

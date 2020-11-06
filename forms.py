@@ -39,7 +39,7 @@ class CreatePostForm(FlaskForm):
     title = StringField(validators=[DataRequired()], id="createTitle")
     description = StringField(validators=[DataRequired()], id="createDescription")
     date = DateField(default=datetime.utcnow)
-    displayImg = StringField(validators=[Length(min=0, max=2048)])
+    displayImg = StringField(validators=[Length(min=0, max=2048)], default="https://i1.sndcdn.com/avatars-000617661867-qpt7lq-original.jpg")
     submit = SubmitField('Create', id ="createPostBtn")
 
 class uploadImageForm(FlaskForm):

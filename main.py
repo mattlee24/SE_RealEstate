@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, UserMixin, login_user, current_user, logout_user
 from werkzeug.utils import secure_filename
+from os import path
 import json, os, random, sqlite3
 
 app = Flask(__name__)
@@ -53,8 +54,8 @@ class Posts(db.Model, UserMixin):
   description = db.Column(db.String(500), nullable=True) 
   date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
   user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-  rating = db.Column(db.Integer, nullable=False, default=1)
-  displayImg = db.Column(db.String(2048), nullable=False, default="https://i1.sndcdn.com/avatars-000617661867-qpt7lq-original.jpg")
+  rating = db.Column(db.Integer, nullable=True, default=1)
+  displayImg = db.Column(db.String(2048), nullable=True, default="https://i1.sndcdn.com/avatars-000617661867-qpt7lq-original.jpg")
   comment_post = db.relationship('Comment', backref='poster', lazy=True)
   img_post = db.relationship('Img', backref='imager', lazy=True)
 
@@ -173,7 +174,8 @@ def delete(id):
 @app.route('/viewPost/<id>', methods=['GET','POST'])
 def viewPost(id):
   targetPost = Posts.query.get(id)
-  return render_template('viewPost.html', targetPost=targetPost)
+  postImages = Img.query.filter_by(post_id=id)
+  return render_template('viewPost.html', targetPost=targetPost, postImages=postImages, postID=id)
 
 #edit post
 @app.route('/EditPost/<id>', methods=['GET','POST'])
@@ -183,10 +185,9 @@ def viewEditPost(id):
   if form.validate_on_submit():
     targetPost.title = form.title.data
     targetPost.description = form.description.data
-    targetPost.imgPath = form.imgPath.data
     db.session.commit()
     flash(f'Post successfully updated!', 'success')
-  return render_template('myposts.html', targetPost=targetPost, form=form)
+  return render_template('editPost.html', targetPost=targetPost, form=form, postID=id)
 
 @app.route('/uploadImg/<id>', methods=['GET','POST'])
 def upload(id):
@@ -207,9 +208,17 @@ def upload(id):
       else:
         filename = secure_filename(image.filename)
         
-      pathing="static/uploads/images"+filename
-      image.save(os.path.join(app.config["IMAGE_UPLOADS"], filename))
       
+      if path.exists('/static/uploads/images/'+filename):
+        image.save(os.path.join(app.config["IMAGE_UPLOADS"], image.filename+"1"))
+    
+      else:
+        image.save(os.path.join(app.config["IMAGE_UPLOADS"], image.filename))
+
+      pathing="static/uploads/images/"+filename
+        
+      
+
       img = Img(name=filename, imgPath=pathing, post_id=id)
       db.session.add(img)
       db.session.commit()
@@ -217,15 +226,6 @@ def upload(id):
       return redirect(url_for('main'))
 
   return render_template('uploadImg.html')
-
-#Get Post Images
-@app.route('/getImages/<id>', methods=['GET','POST'])
-def getImages(id):
-  conn = sqlite3.connect('Users.db')
-  cur = conn.cursor()
-  cur.execute("SELECT * FROM Img where post_id == "+ imgId)
-  imagedata = cur.fetchall()
-  return render_template('test.html', imageData = imagedata)
 
 #main page once logged in
 @app.route("/main", methods=['GET','POST'])

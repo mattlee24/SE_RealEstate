@@ -10,15 +10,19 @@
 }
 #post_username{
     height: 20%;
+    background-color: #ffe0e0;
 }
 #post_content{
     height: 100%;
 }
 #cardTitle{
-    height: 20%;
+    height: 25%;
+    justify-content: space-around;
+    text-align: left;
 }
 #cardDescription{
-    height: 80%;
+    height: 75%;
+    text-align: left;
 }
 #smallPrint-createPost{
     color: white;
@@ -51,7 +55,7 @@
     background-color: #ffe0e0 !important;
     color: rgb(117, 117, 117) !important;
     margin: 30px;
-    height: auto;
+    height: 400px;
 }
 #btn{
     top: 0;
@@ -70,8 +74,7 @@
 img {
     vertical-align: middle;
 }
-  
-/* Position the image container (needed to position the left and right arrows) */
+
 .container {
     position: relative;
     text-align: center;
@@ -80,64 +83,14 @@ img {
 
 }
 
-/* Hide the images by default */
 .mySlides {
-    display: none;
-    width: 100%;
-    height: 70%;
+    width: 30%;
+    height: 20%;
     margin: 30px;
     border: 3px solid #ffe0e0;
 }
-
-/* Add a pointer when hovering over the thumbnail images */
-.cursor {
-    cursor: pointer;
-}
-/* Number text (1/3 etc) */
-.numbertext {
-    color: #f2f2f2;
-    font-size: 12px;
-    padding: 8px 12px;
-    position: absolute;
-    top: 0;
-}
-
-/* Container for image text */
-.caption-container {
-    text-align: center;
-    background-color: #222;
-    padding: 2px 16px;
-    color: white;
-}
-
-.row:after {
-    content: "";
-    display: table;
-    clear: both;
-}
-
-/* Six columns side by side */
-.column {
-    float: left;
-    width: 16.66%;
-}
-
-/* Add a transparency effect for thumnbail images */
-.demo {
-    opacity: 0.4;
-}
-
-.active{
-    opacity: 1;
-}
-.demo:hover {
-    opacity: 1;
-}
-#postImg{
-    height: 100%;
-    width: 100%;
-}
 .row{
+    height: 200px;
     border: 1px solid #ffe0e0;
     margin-bottom: 100px;
     background-color: black;
@@ -145,4 +98,52 @@ img {
 .test{
     display: flex;
     justify-content: space-between;
+}
+#postImg{
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.clmn{
+    width: 20%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+}
+.imagesSize{
+    width: 100% !important;
+    height: 100% !important;
+}
+h1{
+    text-align: center;
+    font-weight: bold;
+    font-size: 100px;
+    color: #ffe0e0 !important;
+}
+#UploadImageForm{
+    display: inline-block;
+    justify-content: center;
+}
+#main-section-editPost{
+    display: block;
+    width: 50%;
+    margin: auto;
+    background-color: #ffe0e0;
+    margin-top: 9%;
+}
+@media screen and (max-width: 900px) {
+    #main-section-editPost{
+        width: 90%;
+    }
+}
+@media screen and (max-width: 1500px) {
+    #main-section-Post{
+        width: 50%;
+        margin-top: 2px;
+    }
+}
+.content-section-editPost{
+    width: 95%;
+    margin: auto;
+    margin-top: 50px;
 }

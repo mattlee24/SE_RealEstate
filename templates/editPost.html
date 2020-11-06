@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<link href="{{ url_for('static', filename='styles/view&editPost.css') }}" rel="stylesheet" type="text/css"/>
+<title>Home</title>
+{% endblock %}
+
+{% block body %}
+{% if current_user.is_authenticated %}
+    {% include 'navbar.html' %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }}" id="message">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <div class="w3-card-4" id="main-section-editPost">
+        {% block content %}
+            <div class="content-section-editPost"><br>
+                <form method="POST", action="" id="EditPostForm">
+                    {{ form.hidden_tag() }}
+                    <fieldset class="form-group">
+                        <legend class="border-bottom mb-4" id="legend-editPost">Update Post</legend>
+                        <div class="form-group">
+                            {% if form.title.errors %}
+                                {{ form.title(class="form-control form-control-lg is-invalid", value=targetPost.title) }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.title.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.title(class="form-control form-control-lg", value=targetPost.title) }}
+                            {% endif %}
+                        </div><br>
+                        <div class="form-group">
+                            {% if form.description.errors %}
+                                {{ form.description(class="form-control form-control-lg is-invalid", value=targetPost.description) }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.description.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.description(class="form-control form-control-lg", value=targetPost.description) }}
+                            {% endif %}
+                        </div><br>
+                        <div class="form-group">
+                            {{ form.submit(class="btn btn-default") }}
+                        </div>
+                        <legend class="border-top pt-3" id="smallPrint-editPost"></legend>
+                    </fieldset>
+                </form>
+            </div>
+        {% endblock content %}
+    </div>
+
+    <h1>Upload an image for this post:</h1>
+    
+    <div>
+        <form method="POST" action="/uploadImg/{{postID}}" enctype="multipart/form-data" id="UploadImageForm">
+            <input type="file" name="imageFile" id="imageFile" placeholder="Choose an Image">
+            <input type="submit" value="Upload Image" id="submitImg">
+        </form>
+    </div> 
+
+{% else %}
+    <p id="pagenotfound">404</p>
+    <p id="pagenotfound2">Page Not Found</p>
+{% endif %}
+
+{% endblock %}
+

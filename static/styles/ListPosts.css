@@ -18,7 +18,8 @@
 }
 .card{
     width: 100%;
-    background-color: #ffe0e0;
+    height: auto;
+    background-color: white;
     color: rgb(117, 117, 117);
     margin-top: 5px !important;
 }
