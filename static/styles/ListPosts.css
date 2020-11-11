@@ -96,3 +96,12 @@ ul {
     color: #ffe0e0 !important;
     background-color:  rgb(117, 117, 117) !important;
 }
+#report{
+    background-color: #ffe0e0 !important;
+    color:  rgb(117, 117, 117) !important;
+    margin-left: 4px;
+}
+#report:hover{
+    color: #ffe0e0 !important;
+    background-color:  rgb(117, 117, 117) !important;
+}

@@ -32,7 +32,7 @@
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item"><b>{{row.title}} </b><br>{{row.date.date()}}</li>
                             <li class="list-group-item">{{row.description}}</li>
-                            <li id="buttons"><a class='btn btn-default w3-card-4' id='visibility' href='viewPost/{{row.id}}'><i class='material-icons'>visibility</i></a>
+                            <li id="buttons"><a class='btn btn-default w3-card-4' id='visibility' href='viewPost/{{row.id}}'><i class='material-icons'>visibility</i></a><a class='btn btn-default w3-card-4' id='report' href='ReportPost/{{row.id}}'><i class='material-icons'>flag</i></a>
                                 {% if (current_user.username ==  row.author.username) or current_user.username == 'Administrator' or current_user.username == 'Administrator Manager' %}
                                 <a class='btn btn-default w3-card-4' id='delete1' href='delete/{{row.id}}'><i class='material-icons'>delete</i></a></li>
                                 {% endif %}

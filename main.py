@@ -118,7 +118,7 @@ def register():
     db.session.commit()
     print(user.id)
     if user.id != 1:
-      defMessage = Messages(user_id=1, to_user_id=user.id, description="Hello " + user.name + " and welcome to our web appliction. This is a default message; if you wish to speak to someone live, please respond to this message in whatever way you deem fit. Thank you!")
+      defMessage = Messages(user_id=1, to_user_id=user.id, description="Hello " + user.name + " and welcome to our web appliction. This is a default message; if you wish to speak to someone live, please respond to this message in whatever way you deem fit. Thank you! To message another user, please select the chat icon next to their name and begin typing a message.")
       db.session.add(defMessage)
       db.session.commit()
     flash(f'Account created for {form.username.data}, they can now log in!', 'success')
@@ -215,6 +215,18 @@ def viewEditPost(id):
     flash(f'Post successfully updated!', 'success')
   return render_template('editPost.html', targetPost=targetPost, form=form, postID=id)
 
+#report post
+@app.route('/ReportPost/<id>', methods=['GET','POST'])
+def reportPost(id):
+  reportedPost = Posts.query.get(id)
+  print(reportedPost)
+  defMessage = "POST REPORTED! TITLE: "+str(reportedPost.title)+" DESCRIPTION: "+str(reportedPost.description)+" Please take a look at the post and delete or send message to post author to edit."
+  message = Messages(user_id=current_user.id, to_user_id=1, description=defMessage)
+  db.session.add(message)
+  db.session.commit()
+  flash(f'Post successfully reported!', 'success')
+  return redirect(url_for('main'))
+
 #upload image
 @app.route('/uploadImg/<id>', methods=['GET','POST'])
 def upload(id):
@@ -258,24 +270,24 @@ def profile(id):
   targetUser = User.query.get(id)
   return render_template('profile.html', targetUser=targetUser)
 
-#messaging
+#messaging-view
 @app.route("/messaging/<id>", methods=['GET','POST'])
 def messaging(id):
   conn = sqlite3.connect('users.db')
   cur = conn.cursor()
   cur.execute("SELECT * FROM Messages WHERE user_id="+str(current_user.id)+" and to_user_id="+str(id)+" or user_id="+str(id)+" and to_user_id="+str(current_user.id))
   data = cur.fetchall()
-  result = []
-  for message in data:
-    result.append(message)
-  print(result)
+  userTo = User.query.get(id)
+  userFrom = User.query.get(current_user.id)
+  userFromAvatar = userFrom.avatar
+  userToAvatar = userTo.avatar
   if request.method == "POST":
     messageRecieved = request.form['message']
     message = Messages(user_id=current_user.id, to_user_id=id, description=messageRecieved)
     db.session.add(message)
     db.session.commit()
-  print(data)
-  return render_template('chat.html', usertosend=id, data=result)
+    return redirect(url_for('messaging', id=id))
+  return render_template('chat.html', usertosend=id, data=data, profileID=current_user.id, userFromAvatar=userFromAvatar, userToAvatar=userToAvatar)
 
 #main page once logged in
 @app.route("/main", methods=['GET','POST'])

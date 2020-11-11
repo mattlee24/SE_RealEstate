@@ -66,3 +66,19 @@ img{
     background-color: rgb(117, 117, 117);
     color: #ffe0e0;
 }
+#refresh{
+    display: block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    justify-content: center;
+    background-color: #ffe0e0;
+    color: rgb(117, 117, 117);
+    border-radius: 25px;
+    width: auto;
+    margin: 5px;
+}
+#refresh:hover{
+    background-color: rgb(117, 117, 117);
+    color: #ffe0e0;
+}

@@ -23,10 +23,31 @@
         <div id="message_container"> 
             
             {% for message in data  %}
-            <div id="message">
-                <div id="para"><p>{{message[3]}}</p></div>
-                <div id="img"><img src="{{ message.author.avatar }}" class="w3-card-4"></div>
-            </div>
+                {% if message[1] == current_user.id %}
+                    {% if 'POST REPORTED!' in message[3] %}
+                        <div id="message">
+                            <div id="para"><p  style="color: red;">{{message[3]}}</p></div>
+                            <div id="img"><img src="{{ userFromAvatar }}" class="w3-card-4"></div>
+                        </div>
+                    {% else %}
+                        <div id="message">
+                            <div id="para"><p>{{message[3]}}</p></div>
+                            <div id="img"><img src="{{ userFromAvatar }}" class="w3-card-4"></div>
+                        </div>
+                    {% endif %}
+                {% else %}
+                    {% if 'POST REPORTED!' in message[3] %}
+                        <div id="message">
+                            <div id="para"><p style="color: red;">{{message[3]}}</p></div>
+                            <div id="img"><img src="{{ userToAvatar }}" class="w3-card-4"></div>
+                        </div>
+                    {% else %}
+                        <div id="message">
+                            <div id="para"><p>{{message[3]}}</p></div>
+                            <div id="img"><img src="{{ userToAvatar }}" class="w3-card-4"></div>
+                        </div>
+                    {% endif %}
+                {% endif %}
             {% endfor %}
             
         </div>
@@ -35,7 +56,7 @@
 
             <form method="POST" action="/messaging/{{usertosend}}" id="UploadImageForm">
                 <input type="text" id="message-to-send" name="message" class="form-control form-control-lg">
-                <input type="submit" value="Send" id="submit" class="btn btn-default" href="message/{{usertosend}}">
+                <input type="submit" value="Send" id="submit" class="btn btn-default" href="messaging/{{usertosend}}">
             </form>
 
         </div>
@@ -46,6 +67,12 @@
     <p id="pagenotfound">404</p>
     <p id="pagenotfound2">Page Not Found</p>
 {% endif %}
+
+<script>
+    if ( window.history.replaceState ) {
+        window.history.replaceState( null, null, window.location.href );
+        }
+</script>
 
 {% endblock %}
 
