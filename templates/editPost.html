@@ -55,18 +55,16 @@
                         <legend class="border-top pt-3" id="smallPrint-editPost"></legend>
                     </fieldset>
                 </form>
+                <h1 id="uploadH1">Upload an image for this post:</h1>
+                <div class="imgUpload">
+                    <form method="POST" action="/uploadImg/{{postID}}" enctype="multipart/form-data" id="UploadImageForm">
+                        <input type="file" name="imageFile" id="imageFile" placeholder="Choose an Image">
+                        <input type="submit" value="Upload Image" id="submitImg">
+                    </form>
+                </div> 
             </div>
         {% endblock content %}
     </div>
-
-    <h1>Upload an image for this post:</h1>
-    
-    <div>
-        <form method="POST" action="/uploadImg/{{postID}}" enctype="multipart/form-data" id="UploadImageForm">
-            <input type="file" name="imageFile" id="imageFile" placeholder="Choose an Image">
-            <input type="submit" value="Upload Image" id="submitImg">
-        </form>
-    </div> 
 
 {% else %}
     <p id="pagenotfound">404</p>

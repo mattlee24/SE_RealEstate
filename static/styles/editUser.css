@@ -5,10 +5,10 @@
     width: 50%;
     margin: auto;
     margin-bottom: 10px;
-    background-color: rgba(225, 225, 225, 0.1);
+    background-color: #ffe0e0;
 }
 #legend-editUser{
-    color: white;
+    color: rgb(117, 117, 117);
 }
 .content-section-editUser{
     width: 95%;

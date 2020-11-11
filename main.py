@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import Flask, render_template, url_for, flash, redirect, jsonify, request, make_response, session
+from flask import Flask, render_template, url_for, flash, redirect, jsonify, request, make_response, session, json
 from forms import *
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
@@ -18,7 +18,6 @@ db = SQLAlchemy(app)
 bcrypt = Bcrypt(app) 
 login_manager = LoginManager(app)
 #images = UploadSet('images', IMAGES)
-viewTimes = 0
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -42,11 +41,13 @@ class User(db.Model, UserMixin):
   role = db.Column(db.String, nullable=False)
   post_user = db.relationship('Posts', backref='author', lazy=True)
   avatar = db.Column(db.String(2048), nullable=True, default="https://s3.amazonaws.com/37assets/svn/765-default-avatar.png")
+  bio = db.Column(db.String(500), nullable = False, default="No description has been given for this profile.")
   rating = db.Column(db.Integer, nullable=False, default=1)
   comment_user = db.relationship('Comment', backref='author', lazy=True)
+  message_from = db.relationship('Messages', backref='author', lazy=True)
 
   def __repr__(self):
-    return f"User('{self.name}', '{self.email}', '{self.username}', '{self.password}', '{self.role}','{self.avatar}', '{self.rating}')"
+    return f"User('{self.name}', '{self.email}', '{self.username}', '{self.password}', '{self.role}','{self.avatar}', '{self.rating}', '{self.bio}')"
 
 class Posts(db.Model, UserMixin):
   id = db.Column(db.Integer, primary_key=True)
@@ -58,9 +59,10 @@ class Posts(db.Model, UserMixin):
   displayImg = db.Column(db.String(2048), nullable=True, default="https://i1.sndcdn.com/avatars-000617661867-qpt7lq-original.jpg")
   comment_post = db.relationship('Comment', backref='poster', lazy=True)
   img_post = db.relationship('Img', backref='imager', lazy=True)
+  timesViewed = db.Column(db.Integer, nullable=True, default=0)
 
   def __repr__(self):
-    return f"Post('{self.title}', '{self.description}', '{self.date}', '{self.avatar}', '{self.rating}')"
+    return f"Post('{self.title}', '{self.description}', '{self.date}', '{self.rating}')"
 
 class Img(db.Model, UserMixin):
   id = db.Column(db.Integer, primary_key=True)
@@ -79,6 +81,15 @@ class Comment(db.Model, UserMixin):
 
   def __repr__(self):
     return f"Comment('{self.title}', '{self.content}', '{self.rating}')"
+
+class Messages(db.Model, UserMixin):
+  id = db.Column(db.Integer, primary_key=True)
+  user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+  to_user_id = db.Column(db.Integer, nullable=False)
+  description = db.Column(db.String(500), nullable=False)
+
+  def __repr__(self):
+    return f"Message('{self.user_id}', '{self.to_user_id}', '{self.description}')"
 
 @app.route("/", methods=['GET','POST'])
 def login():
@@ -105,6 +116,11 @@ def register():
     user = User(name=form.name.data, email=form.email.data, username=form.username.data, password=form.password.data, role=form.role.data)
     db.session.add(user)
     db.session.commit()
+    print(user.id)
+    if user.id != 1:
+      defMessage = Messages(user_id=1, to_user_id=user.id, description="Hello " + user.name + " and welcome to our web appliction. This is a default message; if you wish to speak to someone live, please respond to this message in whatever way you deem fit. Thank you!")
+      db.session.add(defMessage)
+      db.session.commit()
     flash(f'Account created for {form.username.data}, they can now log in!', 'success')
     return redirect(url_for('login'))
   return render_template('register.html', form=form)
@@ -117,15 +133,20 @@ def users():
   data = cur.fetchall()
   return render_template('users.html', data=data)
 
-@app.route("/deleteUser", methods=['GET','POST','DELETE'])
-def deleteUser():
-    reqobj = json.loads(request.data)
-    userID = reqobj['IDofUser']
-    User.query.filter_by(id=userID).delete()
+@app.route("/deleteUser/<id>", methods=['GET','POST','DELETE'])
+def deleteUser(id):
+    targetUser = User.query.get(id)
+    targetPostMessages = Messages.query.filter_by(user_id=id)
+    for message in targetPostMessages:
+      db.session.delete(message)
+    targetPostMessages2 = Messages.query.filter_by(to_user_id=id)
+    for message in targetPostMessages2:
+      db.session.delete(message)
+    db.session.delete(targetUser)
     db.session.commit()
-    resp = make_response("", 204)
-    flash('Successfully deleted user from system!','danger')
-    return resp
+    
+    flash('Successfully deleted user from system!','success')
+    return redirect(url_for('users'))
 
 @app.route("/editUser", methods=['GET','POST'])
 def editUser():
@@ -165,6 +186,9 @@ def createPost():
 @app.route('/delete/<id>', methods = ['GET','POST'])
 def delete(id):
   targetPost = Posts.query.get(id)
+  targetPostImgs = Img.query.filter_by(post_id=id)
+  for img in targetPostImgs:
+    db.session.delete(img)
   db.session.delete(targetPost)
   db.session.commit()
   flash("Post Deleted Successfully!","success")
@@ -175,6 +199,8 @@ def delete(id):
 def viewPost(id):
   targetPost = Posts.query.get(id)
   postImages = Img.query.filter_by(post_id=id)
+  targetPost.timesViewed = targetPost.timesViewed + 1
+  db.session.commit()
   return render_template('viewPost.html', targetPost=targetPost, postImages=postImages, postID=id)
 
 #edit post
@@ -189,9 +215,9 @@ def viewEditPost(id):
     flash(f'Post successfully updated!', 'success')
   return render_template('editPost.html', targetPost=targetPost, form=form, postID=id)
 
+#upload image
 @app.route('/uploadImg/<id>', methods=['GET','POST'])
 def upload(id):
-  
   if request.method == "POST":
     if request.files:
       image = request.files["imageFile"]
@@ -208,17 +234,16 @@ def upload(id):
       else:
         filename = secure_filename(image.filename)
         
-      
-      if path.exists('/static/uploads/images/'+filename):
-        image.save(os.path.join(app.config["IMAGE_UPLOADS"], image.filename+"1"))
-    
+      if os.path.exists('/static/uploads/images/'+filename):
+        randomizer = random.randint(1111,9999999)
+        image.save(os.path.join(app.config["IMAGE_UPLOADS"], str(randomizer)+filename))
+        filename = str(randomizer)+filename
       else:
-        image.save(os.path.join(app.config["IMAGE_UPLOADS"], image.filename))
+        randomizer = random.randint(1111,9999999)
+        image.save(os.path.join(app.config["IMAGE_UPLOADS"], str(randomizer)+filename))
+        filename = str(randomizer)+filename
 
       pathing="static/uploads/images/"+filename
-        
-      
-
       img = Img(name=filename, imgPath=pathing, post_id=id)
       db.session.add(img)
       db.session.commit()
@@ -227,8 +252,34 @@ def upload(id):
 
   return render_template('uploadImg.html')
 
+#view user
+@app.route("/profile/<id>", methods=['GET','POST'])
+def profile(id):
+  targetUser = User.query.get(id)
+  return render_template('profile.html', targetUser=targetUser)
+
+#messaging
+@app.route("/messaging/<id>", methods=['GET','POST'])
+def messaging(id):
+  conn = sqlite3.connect('users.db')
+  cur = conn.cursor()
+  cur.execute("SELECT * FROM Messages WHERE user_id="+str(current_user.id)+" and to_user_id="+str(id)+" or user_id="+str(id)+" and to_user_id="+str(current_user.id))
+  data = cur.fetchall()
+  result = []
+  for message in data:
+    result.append(message)
+  print(result)
+  if request.method == "POST":
+    messageRecieved = request.form['message']
+    message = Messages(user_id=current_user.id, to_user_id=id, description=messageRecieved)
+    db.session.add(message)
+    db.session.commit()
+  print(data)
+  return render_template('chat.html', usertosend=id, data=result)
+
 #main page once logged in
 @app.route("/main", methods=['GET','POST'])
 def main():
   all_posts = Posts.query.all()
+  print(all_posts)
   return render_template("listPosts.html", posts = all_posts)

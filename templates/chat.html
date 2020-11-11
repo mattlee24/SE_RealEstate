@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<link href="{{ url_for('static', filename='styles/chat.css') }}" rel="stylesheet" type="text/css"/>
+<title>Home</title>
+{% endblock %}
+
+{% block body %}
+{% if current_user.is_authenticated %}
+    {% include 'navbar.html' %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }}" id="message">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <div id="main-section-chat">
+
+        <div id="message_container"> 
+            
+            {% for message in data  %}
+            <div id="message">
+                <div id="para"><p>{{message[3]}}</p></div>
+                <div id="img"><img src="{{ message.author.avatar }}" class="w3-card-4"></div>
+            </div>
+            {% endfor %}
+            
+        </div>
+
+        <div id="send-container">
+
+            <form method="POST" action="/messaging/{{usertosend}}" id="UploadImageForm">
+                <input type="text" id="message-to-send" name="message" class="form-control form-control-lg">
+                <input type="submit" value="Send" id="submit" class="btn btn-default" href="message/{{usertosend}}">
+            </form>
+
+        </div>
+
+    </div>
+
+{% else %}
+    <p id="pagenotfound">404</p>
+    <p id="pagenotfound2">Page Not Found</p>
+{% endif %}
+
+{% endblock %}
+

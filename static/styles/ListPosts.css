@@ -22,6 +22,15 @@
     background-color: white;
     color: rgb(117, 117, 117);
     margin-top: 5px !important;
+    display: block;
+}
+.card-title{
+    float: left;
+    vertical-align: middle;
+}
+#views{
+    float: right;
+    vertical-align: middle;
 }
 #li_item1 a{
     color: #ffe0e0;

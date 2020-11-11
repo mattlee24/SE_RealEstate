@@ -146,4 +146,17 @@ h1{
     width: 95%;
     margin: auto;
     margin-top: 50px;
+    height: 450px;
+}
+#uploadH1{
+    text-align: center;
+    color: black !important;
+    font-size: large !important;
+    margin-bottom: 30px;
+}
+.imgUpload{
+    width:100%;
+    height:200px;
+    margin:auto;
+    text-align: center;
 }

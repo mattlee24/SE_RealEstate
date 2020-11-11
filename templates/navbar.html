@@ -6,11 +6,9 @@
             <li id="li_item1" class="nav-item">
                 <a class="btn btn-default" href="../main"><ion-icon name="home"></ion-icon>Home</a>
             </li>
-            {% if current_user.role == 'Administrator' %}
-                <li id="li_item2" class="nav-item">
-                    <a href="../users" class="btn btn-default"><ion-icon name="people"></ion-icon>Users</a>
-                </li>
-            {% endif %}
+            <li id="li_item2" class="nav-item">
+                <a href="../users" class="btn btn-default"><ion-icon name="people"></ion-icon>Users</a>
+            </li>
             <li id="li_item4" class="nav-item">
                 <a href="../myposts" class="btn btn-default"><ion-icon name="document"></ion-icon>My Posts</a>
             </li>
@@ -19,7 +17,7 @@
             </li>
         </ul>
         <form id="searchbar" class="form-inline my-2 my-lg-0">
-            <a href="#" class="btn btn-default"><ion-icon name="person"></ion-icon>{{ current_user.name }}</a>
+            <a href="../profile/{{current_user.id}}" class="btn btn-default"><ion-icon name="person"></ion-icon>{{ current_user.name }}</a>
             <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button> 
         </form>

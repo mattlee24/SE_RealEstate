@@ -25,10 +25,16 @@
                         <th>Name</th>
                         <th>Email</th>
                         <th>Username</th>
+                        {% if current_user.role == 'Administrator Manager' or current_user.role == 'Administrator' %}
                         <th>Password</th>
                         <th>Role</th>
+                        {% endif %}
                         <th>Avatar</th>
-                        <th>Actions</th>
+                        {% if current_user.role == 'Administrator Manager' or current_user.role == 'Administrator' %}
+                            <th>Actions</th>
+                        {% else %}
+                        <th>Chat</th>
+                        {% endif %}
                     </thead>
                     <tbody>
                         {% for user in data %}
@@ -37,21 +43,22 @@
                                     <td>{{ user[1] }}</td>
                                     <td>{{ user[2] }}</td>
                                     <td>{{ user[3] }}</td>
+                                    {% if current_user.role == 'Administrator Manager' or current_user.role == 'Administrator' %}
                                     <td>{{ user[4] }}</td>
                                     <td>{{ user[5] }}</td>
+                                    {% endif %}
                                     <td><img id="image" src="{{ user[6] }}" class="w3-circle"></td>
-                                    <td><a href="editUser" class='btn btn-default w3-card-4' id='edit'><i class='material-icons'>edit</i></a><a class='btn btn-default w3-card-4' id='delete' onclick="displayYesNo()"><i class='material-icons'>delete</i></a></td>
+                                    {% if current_user.role == 'Administrator Manager' or current_user.role == 'Administrator' %}
+                                        <td><a href="editUser" class='btn btn-default w3-card-4' id='edit'><i class='material-icons'>edit</i></a><a class='btn btn-default w3-card-4' id ="chat" href="messaging/{{ user[0] }}"><i class='material-icons'>chat_bubble</i></a><a class='btn btn-default w3-card-4' id='delete' href="deleteUser/{{ user[0] }}"><i class='material-icons'>delete</i></a></td>
+                                    {% else %}
+                                    <td><a class='btn btn-default w3-card-4' id ="chat" href="messaging/{{ user[0] }}"><i class='material-icons'>chat_bubble</i></a></td>
+                                    {% endif %}
+
                                 </tr>
                         {% endfor %}
                     </tbody>
                 </table>
             {% endblock content %}
-            <section id="sectYesNo" class="w3-animate-left">
-                <p id="userIDtoDelete"></p>
-                <p id="sure">Are you sure?</p>
-                <button class="btn btn-default w3-card-4" id="yes">Yes</button>
-                <button class="btn btn-default w3-card-4" id="no" onclick="document.getElementById('sectYesNo').style.display='none';">No</button>
-            </section>
         {% else %}
         <p id="pagenotfound">404</p>
         <p id="pagenotfound2">Page Not Found</p>
@@ -74,38 +81,6 @@
             function displayYesNo(){
                 document.getElementById('sectYesNo').style.display='block';
                 document.getElementById('userIDtoDelete').style.display='none';
-            }
-        </script>
-        <script>
-            $("#tblUsers").on('click','#delete',function(){
-            var currentRow = $(this).closest('tr');
-            var column = currentRow.find("td:eq(0)").text();
-            document.getElementById("userIDtoDelete").innerHTML = column;
-            });
-
-            var delUserBtn = document.getElementById("yes");
-
-            delUserBtn.onclick = function(event){
-            deleteUserFromDatabase(event);
-            }
-
-            function deleteUserFromDatabase(event){
-            event.preventDefault();
-
-            var xhr = new XMLHttpRequest();
-            xhr.open("DELETE", '/deleteUser', true);
-            xhr.onload = function() {
-                if(xhr.readyState == 4 && xhr.status == 204){
-                    window.location.reload();
-                }
-                else{
-                    alert("error");
-                }
-            }
-
-            data = {IDofUser: document.getElementById("userIDtoDelete").innerHTML}
-            dataToString = JSON.stringify(data)
-            xhr.send(dataToString)
             }
         </script>
 

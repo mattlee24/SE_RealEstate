@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>{{ current_user.name }}</title>
+    <link href="{{ url_for('static', filename='styles/profile.css') }}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block body %}
+{% if current_user.is_authenticated %}
+    {% include 'navbar.html' %}
+
+    <div class="profileSection">
+        <div class="userInfo">
+            <div class="avatar"> 
+                <img src={{targetUser.avatar}} alt="avatar" class="w3-circle">
+            </div>
+            <hr id="line">
+            <div class="data">
+                {% if targetUser.rating == 1 or targetUser.rating == 2 %}
+                    <h1 id="bronze"><b>Name: </b>{{ targetUser.name }}</h1>
+                    <h1 id="bronze"><b>Username: </b>{{ targetUser.username }}</h1>
+                    <h1 id="bronze"><b>E-mail: </b>{{ targetUser.email }}</h1>
+                {% elif targetUser.rating == 3 or targetUser.rating == 4 %}
+                    <h1 id="medium"><b>Name: </b>{{ targetUser.name }}</h1>
+                    <h1 id="medium"><b>Username: </b>{{ targetUser.username }}</h1>
+                    <h1 id="medium"><b>E-mail: </b>{{ targetUser.email }}</h1>
+                {% elif targetUser.rating == 5 %}
+                    <h1 id="max"><b>Name: </b>{{ targetUser.name }}</h1>
+                    <h1 id="max"><b>Username: </b>{{ targetUser.username }}</h1>
+                    <h1 id="max"><b>E-mail: </b>{{ targetUser.email }}</h1>
+                {% endif %}
+                <h1 id="ratingH1"><b>Rating: </b></h1>
+                <div class="rating">
+                    {% if targetUser.rating == 1 %}
+                    <span id="bronze" class="material-icons">
+                        stars
+                    </span>
+                    {% elif targetUser.rating == 2 %}
+                    <span id="bronze" class="material-icons">
+                        stars
+                    </span>
+                    <span id="bronze" class="material-icons">
+                        stars
+                    </span>
+                    {% elif targetUser.rating == 3 %}
+                    <span id="medium" class="material-icons">
+                        stars
+                    </span>
+                    <span id="medium" class="material-icons">
+                        stars
+                    </span>
+                    <span id="medium" class="material-icons">
+                        stars
+                    </span>
+                    {% elif targetUser.rating == 4 %}
+                    <span id="medium" class="material-icons">
+                        stars
+                    </span>
+                    <span id="medium" class="material-icons">
+                        stars
+                    </span>
+                    <span id="medium" class="material-icons">
+                        stars
+                    </span>
+                    <span id="medium" class="material-icons">
+                        stars
+                    </span>
+                    {% elif targetUser.rating == 5 %}
+                    <span id="max" class="material-icons">
+                        stars
+                    </span>
+                    <span id="max" class="material-icons">
+                        stars
+                    </span>
+                    <span id="max" class="material-icons">
+                        stars
+                    </span>
+                    <span id="max" class="material-icons">
+                        stars
+                    </span>
+                    <span id="max" class="material-icons">
+                        stars
+                    </span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="bio">
+                <h1><b>About Me</b></h1>
+                {% if targetUser.bio %}
+                    <p>{{ targetUser.bio }}</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="about">
+            
+        </div>
+    </div>
+
+
+    {% else %}
+        <p id="pagenotfound">404</p>
+        <p id="pagenotfound2">Page Not Found</p>
+    {% endif %}
+{% endblock %}

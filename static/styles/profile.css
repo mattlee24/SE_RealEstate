@@ -1,0 +1,107 @@
+.profileSection{
+    width: 70%;
+    margin: auto;
+    margin-top: 50px;
+    margin-bottom: 100px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.8);
+    height: 800px;
+    padding: 35px;
+    color: rgb(117, 117, 117);
+    border-radius: 2px;
+}
+@media screen and (max-width: 1500px) {
+    .profileSection{
+        width: 85%;
+    }
+}
+.userInfo{
+    display: block;
+    height: 700px;
+    background-color:#ffe0e0;
+    border: 1px solid rgb(117, 117, 117);
+    border-radius: 2px;
+}
+.data{
+    margin: 20px;
+    width: 50%;
+    float: left;
+    height: 55%;
+    margin-right: 0;
+}
+.data *{
+    display: block;
+    margin: 10px;
+    text-align: left;
+}
+.avatar{
+    width: 20%;
+    margin: auto;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    height: 30%;
+    text-align: center;
+}
+.bio{
+    float: right;
+    width: 40%;
+    margin: 20px;
+    border: 1px solid black;
+    border-radius: 2px;
+    padding: 20px;
+    height: 55%;
+    margin-right: 30px;
+}
+.bio h1{
+    text-align: center;
+}
+
+b{
+    color: black !important;
+    display: inline !important;
+}
+.rating *{
+    vertical-align: middle;
+    margin: 5px;
+}
+.material-icons{
+    font-size: 40px !important;
+}
+.rating{
+    width: 60%;
+}
+#ratingH1{
+    width:30%;
+    display: inline !important;
+    margin-right: 0;
+}
+img{
+    width: 200px;
+    height: 200px;
+}
+#max{
+    color: goldenrod;
+}
+#bronze{
+    color: #CD7F32;
+}
+#medium{
+    color: grey;
+}
+#line{
+    border: 1px solid black;
+    width: 70%;
+    margin: auto;
+}
+#textarea-bio{
+    vertical-align: middle;
+    
+}
+.bio{
+    text-align: center;
+}
+nav form a{
+    background-color: rgb(117, 117, 117) !important;
+    color: #ffe0e0 !important;
+}
+
+

@@ -194,6 +194,15 @@ nav ul{
     background-color: rgba(225, 225, 225, 0.1);
     color: red !important;
 }
+#chat{
+    background-color: rgba(225, 225, 225, 0.5);
+    color: white !important;
+    margin-right: 4px;
+}
+#chat:hover{
+    background-color: rgba(225, 225, 225, 0.1);
+    color: blue !important;
+}
 .content-section{
     width: 95%;
     margin: auto;

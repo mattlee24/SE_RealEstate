@@ -27,12 +27,13 @@
                     <div class="card ListPost w3-card-4 post">
                         <div class="card-body SinglePost" id="post_username">
                             <h5 class="card-title">Post By: {{row.author.username}}</h5>
+                            <h5 id="views">Views: {{row.timesViewed}}</h2>
                         </div>
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item"><b>{{row.title}} </b><br>{{row.date.date()}}</li>
                             <li class="list-group-item">{{row.description}}</li>
                             <li id="buttons"><a class='btn btn-default w3-card-4' id='visibility' href='viewPost/{{row.id}}'><i class='material-icons'>visibility</i></a>
-                                {% if (current_user.username ==  row.author.username) or current_user.username == 'admin' %}
+                                {% if (current_user.username ==  row.author.username) or current_user.username == 'Administrator' or current_user.username == 'Administrator Manager' %}
                                 <a class='btn btn-default w3-card-4' id='delete1' href='delete/{{row.id}}'><i class='material-icons'>delete</i></a></li>
                                 {% endif %}
                         </ul>
