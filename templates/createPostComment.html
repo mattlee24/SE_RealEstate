@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>New Post</title>
+    <link href="{{ url_for('static', filename='styles/createComment.css') }}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block body %}
+{% if current_user.is_authenticated %}
+
+<div class="createCommentCasing" id="form">
+    <form action="createPostComment/{{postContainer.id}}">
+        <input type="text" name="title" placeholder="title">
+        <input type="textarea" name="content" cols="30" rows="5" placeholder="Type your opinion">
+        <input type="hidden" name="type" value="post">
+        <input type="hidden" name="user" value="{{current_user.id}}">
+        <input type="submit" value="submit">        
+    </form>
+</div>
+
+{% else %}
+    <p id="pagenotfound">404</p>
+    <p id="pagenotfound2">Page Not Found</p>
+{% endif %}
+
+
+{% endblock %}
+

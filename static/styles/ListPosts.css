@@ -99,7 +99,7 @@ ul {
 #report{
     background-color: #ffe0e0 !important;
     color:  rgb(117, 117, 117) !important;
-    margin-left: 4px;
+    margin-left: 8px;
 }
 #report:hover{
     color: #ffe0e0 !important;

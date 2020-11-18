@@ -43,7 +43,7 @@ class User(db.Model, UserMixin):
   avatar = db.Column(db.String(2048), nullable=True, default="https://s3.amazonaws.com/37assets/svn/765-default-avatar.png")
   bio = db.Column(db.String(500), nullable = False, default="No description has been given for this profile.")
   rating = db.Column(db.Integer, nullable=False, default=1)
-  comment_user = db.relationship('Comment', backref='author', lazy=True)
+  comment_user = db.relationship('Comment', backref='userContainer', lazy=True)
   message_from = db.relationship('Messages', backref='author', lazy=True)
 
   def __repr__(self):
@@ -57,7 +57,7 @@ class Posts(db.Model, UserMixin):
   user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
   rating = db.Column(db.Integer, nullable=True, default=1)
   displayImg = db.Column(db.String(2048), nullable=True, default="https://i1.sndcdn.com/avatars-000617661867-qpt7lq-original.jpg")
-  comment_post = db.relationship('Comment', backref='poster', lazy=True)
+  comment_post = db.relationship('Comment', backref='postContainer', lazy=True)
   img_post = db.relationship('Img', backref='imager', lazy=True)
   timesViewed = db.Column(db.Integer, nullable=True, default=0)
 
@@ -76,8 +76,10 @@ class Comment(db.Model, UserMixin):
   content = db.Column(db.String(500), nullable=False)
   rating = db.Column(db.Integer, nullable=False)
   commentType = db.Column(db.String(4), nullable=False)
-  user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-  post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), nullable=False)
+  date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+  posted_by = db.Column(db.Integer, nullable=False)
+  user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+  post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), nullable=True)
 
   def __repr__(self):
     return f"Comment('{self.title}', '{self.content}', '{self.rating}')"
@@ -268,7 +270,7 @@ def upload(id):
 @app.route("/profile/<id>", methods=['GET','POST'])
 def profile(id):
   targetUser = User.query.get(id)
-  return render_template('profile.html', targetUser=targetUser)
+  return render_template('profile.html', targetUser=targetUser, user_ID=id)
 
 #messaging-view
 @app.route("/messaging/<id>", methods=['GET','POST'])
@@ -288,6 +290,51 @@ def messaging(id):
     db.session.commit()
     return redirect(url_for('messaging', id=id))
   return render_template('chat.html', usertosend=id, data=data, profileID=current_user.id, userFromAvatar=userFromAvatar, userToAvatar=userToAvatar)
+
+#list comments
+@app.route("/listComments/<postId>", methods=['GET','POST'])
+def listComments(postId):
+  conn = sqlite3.connect('comment.db')
+  cur = conn.cursor()
+  cur.execute("SELECT * FROM Comment WHERE post_id="+str(postId))
+  allComments = cur.fetchall()
+  return render_template("listComments.html", comments=allComments, postId=postId)
+
+#create a post comment
+@app.route("/createPostComment/<postId>", methods=['GET','POST'])
+def createPostComment(postId):
+  if request.method=="POST":
+    title = request.form['title']
+    content = request.form['content']
+    posted_by = request.form['user']
+    commentType = request.form['type']
+    post_id = postId
+    rating = 1
+    
+
+    comment = Comment(title=title, content=content, rating=rating, commentType=commentType, post_id=post_id, posted_by = posted_by)
+    db.session.add(comment)
+    db.session.commit()
+    return redirect(url_for('createPostComment', post_id))
+  return render_template('createPostComment.html')
+
+#create a user comment
+@app.route("/createUserComment/<userId>", methods=['GET','POST'])
+def createUserComment(userId):
+  if request.method=="POST":
+    title = request.form['title']
+    content = request.form['content']
+    posted_by = request.form['user']
+    commentType = request.form['type']
+    user_id = user_Id
+    rating = 1
+    
+
+    comment = Comment(title=title, content=content, rating=rating, commentType=commentType, user_id=user_id, posted_by = posted_by)
+    db.session.add(comment)
+    db.session.commit()
+    return redirect(url_for('createUserComment', user_id))
+  return render_template('createUserComment.html')
 
 #main page once logged in
 @app.route("/main", methods=['GET','POST'])

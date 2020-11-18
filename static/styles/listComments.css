@@ -1,0 +1,44 @@
+.commentCasing{
+    width: 100%;
+    height: auto;
+    display: flex;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 1px solid  rgb(117, 117, 117);
+}
+.commentTitle{
+    padding: 10px;
+    height: 25%;
+    background-color: #ffe0e0;
+    border: 1px solid  rgb(117, 117, 117);
+}
+.commentContent{
+    padding: 10px;
+    height: 75%;
+    border: 1px solid  rgb(117, 117, 117);
+    background-color: white;
+    text-align:left;
+}
+h1{
+    margin: 5px;
+    margin-bottom: 0;
+}
+h3{
+    margin: 5px;
+    margin-top: 0;
+}
+.left{
+    float: left;
+}
+.right{
+    float: right;
+}
+#max{
+    color: goldenrod;
+}
+#bronze{
+    color: #CD7F32;
+}
+#medium{
+    color: grey;
+}

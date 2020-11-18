@@ -30,7 +30,7 @@
 }
 .data *{
     display: block;
-    margin: 10px;
+    margin: 5px;
     text-align: left;
 }
 .avatar{
@@ -102,6 +102,34 @@ img{
 nav form a{
     background-color: rgb(117, 117, 117) !important;
     color: #ffe0e0 !important;
+}
+#form{
+    display: inline-block;
+}
+#form input{
+    float: left;
+    width: 350px;
+    height: 70px;
+    font-size: 40px;
+}
+#form a {
+    float: right;
+    height: auto;
+}
+#form a i{
+    font-size: 40px !important;
+    vertical-align: middle !important;
+}
+#update{
+    font-size: 15px !important;
+    height: auto !important;
+    color: #ffe0e0;
+    background-color: rgba(117, 117, 117, 0.5);
+    display: none;
+}
+#update:hover{
+    color: rgb(117, 117, 117);
+    background-color: rgba(117, 117, 117, 0.8);
 }
 
 
