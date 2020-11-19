@@ -37,13 +37,13 @@ class User(db.Model, UserMixin):
   name = db.Column(db.String, nullable=False)
   email = db.Column(db.String, nullable=False) 
   username = db.Column(db.String(20), unique=True, nullable=False)
-  password = db.Column(db.String(60), nullable=False)
+  password = db.Column(db.String(100), nullable=False)
   role = db.Column(db.String, nullable=False)
   post_user = db.relationship('Posts', backref='author', lazy=True)
   avatar = db.Column(db.String(2048), nullable=True, default="https://s3.amazonaws.com/37assets/svn/765-default-avatar.png")
   bio = db.Column(db.String(500), nullable = False, default="No description has been given for this profile.")
   rating = db.Column(db.Integer, nullable=False, default=1)
-  comment_user = db.relationship('Comment', backref='userContainer', lazy=True)
+  comment_user = db.relationship('Comment', backref='posterUser', lazy=True)
   message_from = db.relationship('Messages', backref='author', lazy=True)
 
   def __repr__(self):
@@ -57,7 +57,7 @@ class Posts(db.Model, UserMixin):
   user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
   rating = db.Column(db.Integer, nullable=True, default=1)
   displayImg = db.Column(db.String(2048), nullable=True, default="https://i1.sndcdn.com/avatars-000617661867-qpt7lq-original.jpg")
-  comment_post = db.relationship('Comment', backref='postContainer', lazy=True)
+  comment_post = db.relationship('Comment', backref='posterPost', lazy=True)
   img_post = db.relationship('Img', backref='imager', lazy=True)
   timesViewed = db.Column(db.Integer, nullable=True, default=0)
 
@@ -83,7 +83,7 @@ class Comment(db.Model, UserMixin):
 
   def __repr__(self):
     return f"Comment('{self.title}', '{self.content}', '{self.rating}')"
-
+0
 class Messages(db.Model, UserMixin):
   id = db.Column(db.Integer, primary_key=True)
   user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -98,11 +98,18 @@ def login():
   form = LoginForm()
   if form.validate_on_submit():
     user = User.query.filter_by(email=form.email.data).first()
-    if user and user.password == form.password.data:
-      login_user(user)
-      return redirect(url_for('main'))
+    exists = db.session.query(db.session.query(User).filter_by(email=form.email.data).exists()).scalar()
+    if exists == True:
+      pw_checker = bcrypt.check_password_hash(user.password, form.password.data)
+      if pw_checker == True:
+        login_user(user)
+        global user_password
+        user_password = form.password.data
+        return redirect(url_for('main'))
+      else:
+        flash('Login uncessfull, please check email and password!', 'danger')
     else:
-      flash('Login uncessfull, please check username and password!', 'danger')
+        flash('Login uncessfull, please check email and password!', 'danger')
   return render_template('login.html', form=form)
 
 @app.route("/logout")
@@ -115,10 +122,10 @@ def logout():
 def register():
   form = RegistrationForm()
   if form.validate_on_submit():
-    user = User(name=form.name.data, email=form.email.data, username=form.username.data, password=form.password.data, role=form.role.data)
+    password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+    user = User(name=form.name.data, email=form.email.data, username=form.username.data, password=password, role=form.role.data)
     db.session.add(user)
     db.session.commit()
-    print(user.id)
     if user.id != 1:
       defMessage = Messages(user_id=1, to_user_id=user.id, description="Hello " + user.name + " and welcome to our web appliction. This is a default message; if you wish to speak to someone live, please respond to this message in whatever way you deem fit. Thank you! To message another user, please select the chat icon next to their name and begin typing a message.")
       db.session.add(defMessage)
@@ -158,12 +165,26 @@ def editUser():
     x.name = form.name.data
     x.email = form.email.data
     x.username = form.username.data
-    x.password = form.password.data
+    x.password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
     x.role = form.role.data
     db.session.commit()
     flash(f'Account for {form.username.data} successfully updated!', 'success')
     return redirect(url_for('users'))
   return render_template('editUser.html', form=form)
+
+@app.route("/updateProfile/<id>", methods=['GET','POST'])
+def updateProfile(id):
+  if request.method == "POST":
+    x = User.query.filter_by(id=id).first()
+    x.name = request.form['name']
+    x.username = request.form['username']
+    x.email = request.form['email']
+    x.password = bcrypt.generate_password_hash(request.form['password']).decode('utf-8')
+    db.session.commit()
+    global user_password
+    user_password = request.form['password']
+    flash(f'Account successfully updated!', 'success')
+    return redirect(url_for('profile', id=id))
 
 #Add Interface
 @app.route("/myposts", methods=['GET','POST'])
@@ -270,7 +291,7 @@ def upload(id):
 @app.route("/profile/<id>", methods=['GET','POST'])
 def profile(id):
   targetUser = User.query.get(id)
-  return render_template('profile.html', targetUser=targetUser, user_ID=id)
+  return render_template('profile.html', targetUser=targetUser, user_ID=id, user_password=user_password)
 
 #messaging-view
 @app.route("/messaging/<id>", methods=['GET','POST'])
@@ -291,50 +312,62 @@ def messaging(id):
     return redirect(url_for('messaging', id=id))
   return render_template('chat.html', usertosend=id, data=data, profileID=current_user.id, userFromAvatar=userFromAvatar, userToAvatar=userToAvatar)
 
-#list comments
-@app.route("/listComments/<postId>", methods=['GET','POST'])
-def listComments(postId):
-  conn = sqlite3.connect('comment.db')
+#list Post comments
+@app.route("/listPostComments/<postId>", methods=['GET','POST'])
+def listPostComments(postId):
+  conn = sqlite3.connect('users.db')
   cur = conn.cursor()
-  cur.execute("SELECT * FROM Comment WHERE post_id="+str(postId))
+  cur.execute("SELECT * FROM comment WHERE post_id="+str(postId))
   allComments = cur.fetchall()
-  return render_template("listComments.html", comments=allComments, postId=postId)
+  return render_template("listPostComments.html", comments=allComments, postId=postId)
+
+#list User comments
+@app.route("/listUserComments/<userId>", methods=['GET','POST'])
+def listUserComments(userId):
+  conn = sqlite3.connect('user.db')
+  cur = conn.cursor()
+  cur.execute("SELECT * FROM comment WHERE post_id="+str(postId))
+  allComments = cur.fetchall()
+  return render_template("listUserComments.html", comments=allComments, postId=postId)
 
 #create a post comment
 @app.route("/createPostComment/<postId>", methods=['GET','POST'])
 def createPostComment(postId):
+  targetPost = Posts.query.get(postId)
   if request.method=="POST":
     title = request.form['title']
     content = request.form['content']
     posted_by = request.form['user']
-    commentType = request.form['type']
+    commentType = 'post'
     post_id = postId
+    user_id = request.form['user']
     rating = 1
     
-
     comment = Comment(title=title, content=content, rating=rating, commentType=commentType, post_id=post_id, posted_by = posted_by)
     db.session.add(comment)
     db.session.commit()
-    return redirect(url_for('createPostComment', post_id))
-  return render_template('createPostComment.html')
+    flash(f'Comment successfully posted!', 'success')
+    return redirect(url_for('createPostComment', postId=post_id))
+  return render_template('createPostComment.html', targetPost=targetPost)
 
 #create a user comment
 @app.route("/createUserComment/<userId>", methods=['GET','POST'])
 def createUserComment(userId):
+  targetUser=User.query.get(userId)
   if request.method=="POST":
     title = request.form['title']
     content = request.form['content']
     posted_by = request.form['user']
-    commentType = request.form['type']
-    user_id = user_Id
+    commentType = 'user'
+    user_id = userId
     rating = 1
-    
 
     comment = Comment(title=title, content=content, rating=rating, commentType=commentType, user_id=user_id, posted_by = posted_by)
     db.session.add(comment)
     db.session.commit()
-    return redirect(url_for('createUserComment', user_id))
-  return render_template('createUserComment.html')
+    flash(f'Comment successfully posted!', 'success')
+    return redirect(url_for('createUserComment', userId=user_id))
+  return render_template('createUserComment.html', targetUser=targetUser)
 
 #main page once logged in
 @app.route("/main", methods=['GET','POST'])

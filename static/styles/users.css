@@ -6,8 +6,10 @@
     width: 60px;
     height: 60px;
 }
-td{
+th, td{
     display: table-cell;
     vertical-align: middle !important;
     height: auto;
+    width: 150px;
+    overflow: scroll;
 }

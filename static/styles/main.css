@@ -171,6 +171,7 @@ nav ul{
     margin-top: 50px;
     color: grey;
     background-color: #ffe0e0;
+    table-layout: fixed;
 }
 @media screen and (max-width: 15000px) {
     .w3-table{
@@ -197,7 +198,7 @@ nav ul{
 #chat{
     background-color: rgba(225, 225, 225, 0.5);
     color: white !important;
-    margin-right: 4px;
+    margin: 4px;
 }
 #chat:hover{
     background-color: rgba(225, 225, 225, 0.1);

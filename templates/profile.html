@@ -9,6 +9,16 @@
 {% if current_user.is_authenticated %}
     {% include 'navbar.html' %}
 
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }}" id="message">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+
     <div class="profileSection">
         <div class="userInfo">
             <div class="avatar"> 
@@ -16,35 +26,25 @@
             </div>
             <hr id="line">
             <div class="data">
-                <form id="form">
+                <form method="POST" action="../updateProfile/{{targetUser.id}}" id="form">
                     {% if targetUser.rating == 1 or targetUser.rating == 2 %}
-                        <input type="text" id="bronze" name="name" disabled placeholder="{{targetUser.name}}"><a class='btn btn-default w3-card-4' id='editname'><i class='material-icons'>create</i></a>
-                        <input type="text" id="bronze" name="username" disabled placeholder="{{targetUser.username}}"><a class='btn btn-default w3-card-4' id='editusername'><i class='material-icons'>create</i></a>
-                        <input type="text" id="bronze" name="email" disabled placeholder="{{targetUser.email}}"><a class='btn btn-default w3-card-4' id='editemail'><i class='material-icons'>create</i></a>
+                        <input type="text" id="bronze" name="name" value="{{targetUser.name}}">
+                        <input type="text" id="bronze" name="username" value="{{targetUser.username}}">
+                        <input type="text" id="bronze" name="email" value="{{targetUser.email}}">
+                        <input type="text" id="bronze" name="password" value="{{user_password}}">
                     {% elif targetUser.rating == 3 or targetUser.rating == 4 %}
-                        <input type="text" id="medium" name="name" disabled placeholder="{{targetUser.name}}"><a class='btn btn-default w3-card-4' id='editname'><i class='material-icons'>create</i></a>
-                        <input type="text" id="medium" name="username" disabled placeholder="{{targetUser.username}}"><a class='btn btn-default w3-card-4' id='editusername'><i class='material-icons'>create</i></a>
-                        <input type="text" id="medium" name="email" disabled placeholder="{{targetUser.email}}"><a class='btn btn-default w3-card-4' id='editmail'><i class='material-icons'>create</i></a>
+                        <input type="text" id="medium" name="name" value="{{targetUser.name}}">
+                        <input type="text" id="medium" name="username" value="{{targetUser.username}}">
+                        <input type="text" id="medium" name="email" value="{{targetUser.email}}">
+                        <input type="text" id="medium" name="password" value="{{user_password}}">
                     {% elif targetUser.rating == 5 %}
-                        <input type="text" id="max" name="name" disabled placeholder="{{targetUser.name}}"><a class='btn btn-default w3-card-4' id='editname'><i class='material-icons'>create</i></a>
-                        <input type="text" id="max" name="username" disabled placeholder="{{targetUser.username}}"><a class='btn btn-default w3-card-4' id='editusername'><i class='material-icons'>create</i></a>
-                        <input type="text" id="max" name="email" disabled placeholder="{{targetUser.email}}"><a class='btn btn-default w3-card-4' id='editemail'><i class='material-icons'>create</i></a>
+                        <input type="text" id="max" name="name" value="{{targetUser.name}}">
+                        <input type="text" id="max" name="username" value="{{targetUser.username}}">
+                        <input type="text" id="max" name="email" value="{{targetUser.email}}">
+                        <input type="text" id="max" name="password" value="{{user_password}}">
                     {% endif %}
                     <input type="submit" value="Update" id="update" class="btn btn-default">
                 </form>
-                <!--{% if targetUser.rating == 1 or targetUser.rating == 2 %}
-                    <h1 id="bronze"><b>Name: </b>{{ targetUser.name }}</h1>
-                    <h1 id="bronze"><b>Username: </b>{{ targetUser.username }}</h1>
-                    <h1 id="bronze"><b>E-mail: </b>{{ targetUser.email }}</h1>
-                {% elif targetUser.rating == 3 or targetUser.rating == 4 %}
-                    <h1 id="medium"><b>Name: </b>{{ targetUser.name }}</h1>
-                    <h1 id="medium"><b>Username: </b>{{ targetUser.username }}</h1>
-                    <h1 id="medium"><b>E-mail: </b>{{ targetUser.email }}</h1>
-                {% elif targetUser.rating == 5 %}
-                    <h1 id="max"><b>Name: </b>{{ targetUser.name }}</h1>
-                    <h1 id="max"><b>Username: </b>{{ targetUser.username }}</h1>
-                    <h1 id="max"><b>E-mail: </b>{{ targetUser.email }}</h1>
-                {% endif %}-->
                 <h1 id="ratingH1"><b>Rating: </b></h1>
                 <div class="rating">
                     {% if targetUser.rating == 1 %}
@@ -118,18 +118,5 @@
         <p id="pagenotfound2">Page Not Found</p>
     {% endif %}
 
-<script>
-    $('#editname').click(function(){
-        $('[name ="name"]').removeAttr('disabled')
-        document.getElementById('update').style.display = "block"
-    });
-    $('#editusername').click(function(){
-        $('[name ="username"]').removeAttr('disabled')
-        document.getElementById('update').style.display = "block"
-    });
-    $('#editemail').click(function(){
-        $('[name ="email"]').removeAttr('disabled')
-        document.getElementById('update').style.display = "block"
-    });
-</script>
+
 {% endblock %}
