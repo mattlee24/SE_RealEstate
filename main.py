@@ -70,20 +70,30 @@ class Img(db.Model, UserMixin):
   imgPath = db.Column(db.String, nullable=False)
   post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), nullable=False)
 
-class Comment(db.Model, UserMixin):
+class CommentPost(db.Model, UserMixin):
   id = db.Column(db.Integer, primary_key=True)
   title = db.Column(db.String(50), nullable=False)
   content = db.Column(db.String(500), nullable=False)
   rating = db.Column(db.Integer, nullable=False)
-  commentType = db.Column(db.String(4), nullable=False)
   date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
   posted_by = db.Column(db.Integer, nullable=False)
-  user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
   post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), nullable=True)
 
   def __repr__(self):
-    return f"Comment('{self.title}', '{self.content}', '{self.rating}')"
-0
+    return f"Post Comment('{self.title}', '{self.content}', '{self.rating}', '{self.date}', '{self.posted_by}')"
+
+class CommentUser(db.Model, UserMixin):
+  id = db.Column(db.Integer, primary_key=True)
+  title = db.Column(db.String(50), nullable=False)
+  content = db.Column(db.String(500), nullable=False)
+  rating = db.Column(db.Integer, nullable=False)
+  date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+  posted_by = db.Column(db.Integer, nullable=False)
+  user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+
+  def __repr__(self):
+    return f"User Comment('{self.title}', '{self.content}', '{self.rating}', '{self.date}', '{self.posted_by}')"
+
 class Messages(db.Model, UserMixin):
   id = db.Column(db.Integer, primary_key=True)
   user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -315,20 +325,22 @@ def messaging(id):
 #list Post comments
 @app.route("/listPostComments/<postId>", methods=['GET','POST'])
 def listPostComments(postId):
+  poster = Posts.query.get(id)
   conn = sqlite3.connect('users.db')
   cur = conn.cursor()
-  cur.execute("SELECT * FROM comment WHERE post_id="+str(postId))
+  cur.execute("SELECT * FROM commentPost WHERE post_id="+str(postId))
   allComments = cur.fetchall()
   return render_template("listPostComments.html", comments=allComments, postId=postId)
 
 #list User comments
 @app.route("/listUserComments/<userId>", methods=['GET','POST'])
 def listUserComments(userId):
+  poster = 
   conn = sqlite3.connect('user.db')
   cur = conn.cursor()
-  cur.execute("SELECT * FROM comment WHERE post_id="+str(postId))
+  cur.execute("SELECT * FROM commentUser WHERE post_id="+str(userId))
   allComments = cur.fetchall()
-  return render_template("listUserComments.html", comments=allComments, postId=postId)
+  return render_template("listUserComments.html", comments=allComments, userId=userId)
 
 #create a post comment
 @app.route("/createPostComment/<postId>", methods=['GET','POST'])
@@ -337,13 +349,12 @@ def createPostComment(postId):
   if request.method=="POST":
     title = request.form['title']
     content = request.form['content']
-    posted_by = request.form['user']
-    commentType = 'post'
+    posted_by = request.form['postedBy']
     post_id = postId
     user_id = request.form['user']
     rating = 1
     
-    comment = Comment(title=title, content=content, rating=rating, commentType=commentType, post_id=post_id, posted_by = posted_by)
+    comment = Comment(title=title, content=content, rating=rating, post_id=post_id, posted_by = posted_by)
     db.session.add(comment)
     db.session.commit()
     flash(f'Comment successfully posted!', 'success')
@@ -357,12 +368,11 @@ def createUserComment(userId):
   if request.method=="POST":
     title = request.form['title']
     content = request.form['content']
-    posted_by = request.form['user']
-    commentType = 'user'
+    posted_by = request.form['postedBy']
     user_id = userId
     rating = 1
 
-    comment = Comment(title=title, content=content, rating=rating, commentType=commentType, user_id=user_id, posted_by = posted_by)
+    comment = Comment(title=title, content=content, rating=rating, user_id=user_id, posted_by = posted_by)
     db.session.add(comment)
     db.session.commit()
     flash(f'Comment successfully posted!', 'success')
