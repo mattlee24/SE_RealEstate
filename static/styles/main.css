@@ -166,17 +166,12 @@ nav ul{
     background-color: #ffe0e0;
 }
 .w3-table{
-    width: 50% !important;
+    width: 90% !important;
     margin: auto;
     margin-top: 50px;
     color: grey;
     background-color: #ffe0e0;
     table-layout: fixed;
-}
-@media screen and (max-width: 15000px) {
-    .w3-table{
-        width: 80% !important;
-    }
 }
 #edit{
     background-color: rgba(225, 225, 225, 0.5);
@@ -198,7 +193,7 @@ nav ul{
 #chat{
     background-color: rgba(225, 225, 225, 0.5);
     color: white !important;
-    margin: 4px;
+    margin-right: 4px !important;
 }
 #chat:hover{
     background-color: rgba(225, 225, 225, 0.1);

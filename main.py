@@ -43,7 +43,6 @@ class User(db.Model, UserMixin):
   avatar = db.Column(db.String(2048), nullable=True, default="https://s3.amazonaws.com/37assets/svn/765-default-avatar.png")
   bio = db.Column(db.String(500), nullable = False, default="No description has been given for this profile.")
   rating = db.Column(db.Integer, nullable=False, default=1)
-  comment_user = db.relationship('Comment', backref='posterUser', lazy=True)
   message_from = db.relationship('Messages', backref='author', lazy=True)
 
   def __repr__(self):
@@ -57,7 +56,7 @@ class Posts(db.Model, UserMixin):
   user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
   rating = db.Column(db.Integer, nullable=True, default=1)
   displayImg = db.Column(db.String(2048), nullable=True, default="https://i1.sndcdn.com/avatars-000617661867-qpt7lq-original.jpg")
-  comment_post = db.relationship('Comment', backref='posterPost', lazy=True)
+  post_comment = db.relationship('Comment', backref='posterPost', lazy=True)
   img_post = db.relationship('Img', backref='imager', lazy=True)
   timesViewed = db.Column(db.Integer, nullable=True, default=0)
 
@@ -70,7 +69,7 @@ class Img(db.Model, UserMixin):
   imgPath = db.Column(db.String, nullable=False)
   post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), nullable=False)
 
-class CommentPost(db.Model, UserMixin):
+class Comment(db.Model, UserMixin):
   id = db.Column(db.Integer, primary_key=True)
   title = db.Column(db.String(50), nullable=False)
   content = db.Column(db.String(500), nullable=False)
@@ -81,18 +80,6 @@ class CommentPost(db.Model, UserMixin):
 
   def __repr__(self):
     return f"Post Comment('{self.title}', '{self.content}', '{self.rating}', '{self.date}', '{self.posted_by}')"
-
-class CommentUser(db.Model, UserMixin):
-  id = db.Column(db.Integer, primary_key=True)
-  title = db.Column(db.String(50), nullable=False)
-  content = db.Column(db.String(500), nullable=False)
-  rating = db.Column(db.Integer, nullable=False)
-  date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-  posted_by = db.Column(db.Integer, nullable=False)
-  user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
-
-  def __repr__(self):
-    return f"User Comment('{self.title}', '{self.content}', '{self.rating}', '{self.date}', '{self.posted_by}')"
 
 class Messages(db.Model, UserMixin):
   id = db.Column(db.Integer, primary_key=True)
@@ -194,6 +181,14 @@ def updateProfile(id):
     global user_password
     user_password = request.form['password']
     flash(f'Account successfully updated!', 'success')
+    return redirect(url_for('profile', id=id))
+@app.route("/updateBio/<id>", methods=['GET','POST'])
+def updateBio(id):
+  if request.method == "POST":
+    x = User.query.filter_by(id=id).first()
+    x.bio = request.form['bio']
+    db.session.commit()
+    flash(f'Account bio successfully updated!', 'success')
     return redirect(url_for('profile', id=id))
 
 #Add Interface
@@ -328,19 +323,9 @@ def listPostComments(postId):
   poster = Posts.query.get(id)
   conn = sqlite3.connect('users.db')
   cur = conn.cursor()
-  cur.execute("SELECT * FROM commentPost WHERE post_id="+str(postId))
+  cur.execute("SELECT * FROM Comment WHERE post_id="+str(postId))
   allComments = cur.fetchall()
   return render_template("listPostComments.html", comments=allComments, postId=postId)
-
-#list User comments
-@app.route("/listUserComments/<userId>", methods=['GET','POST'])
-def listUserComments(userId):
-  poster = 
-  conn = sqlite3.connect('user.db')
-  cur = conn.cursor()
-  cur.execute("SELECT * FROM commentUser WHERE post_id="+str(userId))
-  allComments = cur.fetchall()
-  return render_template("listUserComments.html", comments=allComments, userId=userId)
 
 #create a post comment
 @app.route("/createPostComment/<postId>", methods=['GET','POST'])
@@ -353,31 +338,12 @@ def createPostComment(postId):
     post_id = postId
     user_id = request.form['user']
     rating = 1
-    
-    comment = Comment(title=title, content=content, rating=rating, post_id=post_id, posted_by = posted_by)
+    comment = User(title=title, content=content, rating=rating, post_id=post_id, posted_by = posted_by)
     db.session.add(comment)
     db.session.commit()
     flash(f'Comment successfully posted!', 'success')
     return redirect(url_for('createPostComment', postId=post_id))
   return render_template('createPostComment.html', targetPost=targetPost)
-
-#create a user comment
-@app.route("/createUserComment/<userId>", methods=['GET','POST'])
-def createUserComment(userId):
-  targetUser=User.query.get(userId)
-  if request.method=="POST":
-    title = request.form['title']
-    content = request.form['content']
-    posted_by = request.form['postedBy']
-    user_id = userId
-    rating = 1
-
-    comment = Comment(title=title, content=content, rating=rating, user_id=user_id, posted_by = posted_by)
-    db.session.add(comment)
-    db.session.commit()
-    flash(f'Comment successfully posted!', 'success')
-    return redirect(url_for('createUserComment', userId=user_id))
-  return render_template('createUserComment.html', targetUser=targetUser)
 
 #main page once logged in
 @app.route("/main", methods=['GET','POST'])

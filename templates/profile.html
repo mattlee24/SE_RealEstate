@@ -101,10 +101,11 @@
                 </div>
             </div>
             <div class="bio">
-                <h1><b>About Me</b></h1>
-                {% if targetUser.bio %}
-                    <p>{{ targetUser.bio }}</p>
-                {% endif %}
+                <form method="POST" action="../updateBio/{{targetUser.id}}" id="bio-form">
+                    <h1><b>About Me</b></h1>
+                    <textarea rows=10 cols="200" id="bio-input" name="bio" style="resize: none;">{{ targetUser.bio }}</textarea>
+                    <input type="submit" value="Update Bio" id="update-bio" class="btn btn-default">
+                </form> 
             </div>
         </div>
         <div class="about">

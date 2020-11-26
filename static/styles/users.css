@@ -10,6 +10,6 @@ th, td{
     display: table-cell;
     vertical-align: middle !important;
     height: auto;
-    width: 150px;
+    width: 200px;
     overflow: scroll;
 }
