@@ -28,22 +28,22 @@
             <div class="data">
                 <form method="POST" action="../updateProfile/{{targetUser.id}}" id="form">
                     {% if targetUser.rating == 1 or targetUser.rating == 2 %}
-                        <input type="text" id="bronze" name="name" value="{{targetUser.name}}">
-                        <input type="text" id="bronze" name="username" value="{{targetUser.username}}">
-                        <input type="text" id="bronze" name="email" value="{{targetUser.email}}">
-                        <input type="text" id="bronze" name="password" value="{{user_password}}">
+                        <input type="text" id="bronze" name="name" value="{{targetUser.name}}" {% if targetUser.id != current_user.id %} disabled {% endif %}>
+                        <input type="text" id="bronze" name="username" value="{{targetUser.username}}" {% if targetUser.id != current_user.id %} disabled {% endif %}>
+                        <input type="text" id="bronze" name="email" value="{{targetUser.email}}" {% if targetUser.id != current_user.id %} disabled {% endif %}>
+                        <input type="text" id="bronze" name="password" value="{{user_password}}" {% if targetUser.id != current_user.id %} disabled {% endif %}>
                     {% elif targetUser.rating == 3 or targetUser.rating == 4 %}
-                        <input type="text" id="medium" name="name" value="{{targetUser.name}}">
-                        <input type="text" id="medium" name="username" value="{{targetUser.username}}">
-                        <input type="text" id="medium" name="email" value="{{targetUser.email}}">
-                        <input type="text" id="medium" name="password" value="{{user_password}}">
+                        <input type="text" id="medium" name="name" value="{{targetUser.name}}" {% if targetUser.id != current_user.id %} disabled {% endif %}>
+                        <input type="text" id="medium" name="username" value="{{targetUser.username}}" {% if targetUser.id != current_user.id %} disabled {% endif %}>
+                        <input type="text" id="medium" name="email" value="{{targetUser.email}}" {% if targetUser.id != current_user.id %} disabled {% endif %}>
+                        <input type="text" id="medium" name="password" value="{{user_password}}" {% if targetUser.id != current_user.id %} disabled {% endif %}>
                     {% elif targetUser.rating == 5 %}
-                        <input type="text" id="max" name="name" value="{{targetUser.name}}">
-                        <input type="text" id="max" name="username" value="{{targetUser.username}}">
-                        <input type="text" id="max" name="email" value="{{targetUser.email}}">
-                        <input type="text" id="max" name="password" value="{{user_password}}">
+                        <input type="text" id="max" name="name" value="{{targetUser.name}}" {% if targetUser.id != current_user.id %} disabled {% endif %}>
+                        <input type="text" id="max" name="username" value="{{targetUser.username}}" {% if targetUser.id != current_user.id %} disabled {% endif %}>
+                        <input type="text" id="max" name="email" value="{{targetUser.email}}" {% if targetUser.id != current_user.id %} disabled {% endif %}>
+                        <input type="text" id="max" name="password" value="{{user_password}}" {% if targetUser.id != current_user.id %} disabled {% endif %}>
                     {% endif %}
-                    <input type="submit" value="Update" id="update" class="btn btn-default">
+                    <input type="submit" value="Update" id="update" class="btn btn-default" {% if targetUser.id != current_user.id %} style="display: none;" {% endif %}>
                 </form>
                 <h1 id="ratingH1"><b>Rating: </b></h1>
                 <div class="rating">
@@ -103,8 +103,8 @@
             <div class="bio">
                 <form method="POST" action="../updateBio/{{targetUser.id}}" id="bio-form">
                     <h1><b>About Me</b></h1>
-                    <textarea rows=10 cols="200" id="bio-input" name="bio" style="resize: none;">{{ targetUser.bio }}</textarea>
-                    <input type="submit" value="Update Bio" id="update-bio" class="btn btn-default">
+                    <textarea rows=10 cols="200" id="bio-input" name="bio" style="resize: none;" {% if targetUser.id != current_user.id %} disabled {% endif %}>{{ targetUser.bio }}</textarea>
+                    <input type="submit" value="Update Bio" id="update-bio" class="btn btn-default" {% if targetUser.id != current_user.id %} style="display: none;" {% endif %}>
                 </form> 
             </div>
         </div>

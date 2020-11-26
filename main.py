@@ -182,6 +182,7 @@ def updateProfile(id):
     user_password = request.form['password']
     flash(f'Account successfully updated!', 'success')
     return redirect(url_for('profile', id=id))
+    
 @app.route("/updateBio/<id>", methods=['GET','POST'])
 def updateBio(id):
   if request.method == "POST":

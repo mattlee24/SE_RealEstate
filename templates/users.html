@@ -30,11 +30,7 @@
                         <th>Role</th>
                         {% endif %}
                         <th>Avatar</th>
-                        {% if current_user.role == 'Administrator Manager' or current_user.role == 'Administrator' %}
-                            <th>Actions</th>
-                        {% else %}
-                        <th>Chat</th>
-                        {% endif %}
+                        <th>Actions</th>
                     </thead>
                     <tbody>
                         {% for user in data %}
@@ -49,9 +45,13 @@
                                     {% endif %}
                                     <td><img id="image" src="{{ user[6] }}" class="w3-circle"></td>
                                     {% if current_user.role == 'Administrator Manager' or current_user.role == 'Administrator' %}
-                                        <td><a href="editUser" class='btn btn-default w3-card-4' id='edit'><i class='material-icons'>edit</i></a><a class='btn btn-default w3-card-4' id ="chat" href="messaging/{{ user[0] }}"><i class='material-icons'>chat_bubble</i></a><a class='btn btn-default w3-card-4' id='delete' href="deleteUser/{{ user[0] }}"><i class='material-icons'>delete</i></a></td>
+                                        <td><a href="editUser" class='btn btn-default w3-card-4 table-button' id='edit'><i class='material-icons'>edit</i></a>
+                                            <a class='btn btn-default w3-card-4 table-button' id ="chat" href="messaging/{{ user[0] }}"><i class='material-icons'>chat_bubble</i></a>
+                                            <a class='btn btn-default w3-card-4 table-button' id ="chat" href="profile/{{ user[0] }}"><i class='material-icons'>visibility</i></a>
+                                            <a class='btn btn-default w3-card-4 table-button' id='delete' href="deleteUser/{{ user[0] }}"><i class='material-icons'>delete</i></a></td>
                                     {% else %}
-                                    <td><a class='btn btn-default w3-card-4' id ="chat" href="messaging/{{ user[0] }}"><i class='material-icons'>chat_bubble</i></a></td>
+                                        <td><a class='btn btn-default w3-card-4 table-button' id ="chat" href="messaging/{{ user[0] }}"><i class='material-icons'>chat_bubble</i></a>
+                                            <a class='btn btn-default w3-card-4 table-button' id ="chat" href="profile/{{ user[0] }}"><i class='material-icons'>visibility</i></a></td>
                                     {% endif %}
 
                                 </tr>
