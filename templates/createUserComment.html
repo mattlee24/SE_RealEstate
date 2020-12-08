@@ -9,11 +9,11 @@
 {% if current_user.is_authenticated %}
 
 <div class="createCommentCasing" id="form">
-    <form action="{{ url_for('createPostComment', postId = targetPost.id) }}" method="POST">
+    <form action="{{url_for('createUserComment', userId = targetUser.id)}}" method="POST">
         <input type="text" name="title" placeholder="title">
-        <input type="textarea" name="content" cols="30" rows="5" placeholder="Type your opinion">
+        <input type="textarea" name="content" cols="30" rows="5">
         <input type="hidden" name="postedBy" value="{{current_user.id}}">
-        <input type="submit" value="submit">        
+        <input type="submit" value="submit">       
     </form>
 </div>
 
@@ -24,4 +24,3 @@
 
 
 {% endblock %}
-
