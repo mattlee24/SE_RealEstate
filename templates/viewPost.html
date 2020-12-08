@@ -4,9 +4,31 @@
 <title>View Post</title>
 <link href="{{ url_for('static', filename='styles/view&editPost.css') }}" rel="stylesheet" type="text/css" />
 {% endblock %}
-
 {% block body %}
+
 {% if current_user.is_authenticated %}
+
+<nav id="navSection" class="navbar navbar-expand-lg navbar-dark sticky-top w3-card-4">
+  <ul class="navbar-nav">
+      <li id="li_item1" class="nav-item">
+          <a class="btn btn-default" href="../main"><ion-icon name="home"></ion-icon>Home</a>
+      </li>
+      <li id="li_item2" class="nav-item">
+          <a href="../users" class="btn btn-default"><ion-icon name="people"></ion-icon>Users</a>
+      </li>
+      <li id="li_item4" class="nav-item">
+          <a href="../myposts" class="btn btn-default"><ion-icon name="document"></ion-icon>My Posts</a>
+      </li>
+      <li id="li_item3" class="nav-item">
+          <a href="../logout" class="btn btn-default"><ion-icon name="backspace"></ion-icon>Logout</a>
+      </li>
+  </ul>
+  <form id="searchbar" class="form-inline my-2 my-lg-0">
+      <a href="../profile/{{current_user.id}}" class="btn btn-default"><ion-icon name="person"></ion-icon>{{ current_user.name }}</a>
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button> 
+  </form>
+</nav>
 
 {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
@@ -37,7 +59,6 @@
             </ul>
         </div>
     </div>
-    {% include 'listComments.html' %}
         <div class="row">
             {% for row in postImages %}
                 <div class="clmn" data-toggle="modal" data-target=".bd-example-modal-lg">
@@ -110,12 +131,72 @@
         </div>
     </div>
 </div>
-
-<a class="btn btn-default" id="btn" href="../main"><i class='material-icons'>undo</i></a>
+{% include 'createPostComment.html' %}
+{% for row in comments %}
+<div class="commentCasing">
+  <div class="commentTitle">
+      <h1 id="left">{{row.title}}</h1>
+      <h3 id="left">{{current_user.username}}</h3>
+      <h3 id="right">{{row.date}}<h3>
+          <div class="rating">
+              {% if row.rating == 1 %}
+              <span id="bronze" class="material-icons">
+                  stars
+              </span>
+              {% elif row.rating == 2 %}
+              <span id="bronze" class="material-icons">
+                  stars
+              </span>
+              <span id="bronze" class="material-icons">
+                  stars
+              </span>
+              {% elif row.rating == 3 %}
+              <span id="medium" class="material-icons">
+                  stars
+              </span>
+              <span id="medium" class="material-icons">
+                  stars
+              </span>
+              <span id="medium" class="material-icons">
+                  stars
+              </span>
+              {% elif row.rating == 4 %}
+              <span id="medium" class="material-icons">
+                  stars
+              </span>
+              <span id="medium" class="material-icons">
+                  stars
+              </span>
+              <span id="medium" class="material-icons">
+                  stars
+              </span>
+              <span id="medium" class="material-icons">
+                  stars
+              </span>
+              {% elif row.rating == 5 %}
+              <span id="max" class="material-icons">
+                  stars
+              </span>
+              <span id="max" class="material-icons">
+                  stars
+              </span>
+              <span id="max" class="material-icons">
+                  stars
+              </span>
+              <span id="max" class="material-icons">
+                  stars
+              </span>
+              <span id="max" class="material-icons">
+                  stars
+              </span>
+              {% endif %}
+          </div>
+  </div>
+  <div class="commentContent">
+      <p>{{row.content}}<p>
+  </div>
+</div>
+{% endfor %}
 {% endif %}
-<script>
-    modalViewHandler = () => {
-        
-    }
-</script>
+
 {% endblock %}

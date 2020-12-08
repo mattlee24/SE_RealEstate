@@ -1,4 +1,7 @@
 .createCommentCasing{
     width: 100%;
-    height:auto;
+    height: auto;
+    margin: auto;
+    background-color: #ffe0e0;;
+    padding: 10px;
 }

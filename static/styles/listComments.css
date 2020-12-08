@@ -1,27 +1,31 @@
 .commentCasing{
-    width: 100%;
+    width: 80%;
     height: auto;
     display: flex;
+    margin: auto;
     margin-top: 10px;
     margin-bottom: 10px;
+    background-color: white;
     border: 1px solid  rgb(117, 117, 117);
 }
 .commentTitle{
     padding: 10px;
     height: 25%;
     background-color: #ffe0e0;
-    border: 1px solid  rgb(117, 117, 117);
+    border: 2px double rgb(0,0,0);
+    padding: 5px;
 }
 .commentContent{
     padding: 10px;
     height: 75%;
-    border: 1px solid  rgb(117, 117, 117);
     background-color: white;
     text-align:left;
 }
 h1{
     margin: 5px;
     margin-bottom: 0;
+    color: black !important; 
+    text-align: left;
 }
 h3{
     margin: 5px;

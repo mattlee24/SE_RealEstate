@@ -159,13 +159,9 @@ def editUser():
   form = EditForm()
   if form.validate_on_submit():
     x = User.query.filter_by(id=form.id.data).first()
-    x.name = form.name.data
-    x.email = form.email.data
-    x.username = form.username.data
     x.password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-    x.role = form.role.data
     db.session.commit()
-    flash(f'Account for {form.username.data} successfully updated!', 'success')
+    flash(f'Account for {x.username} successfully updated!', 'success')
     return redirect(url_for('users'))
   return render_template('editUser.html', form=form)
 
@@ -227,10 +223,11 @@ def delete(id):
 @app.route('/viewPost/<id>', methods=['GET','POST'])
 def viewPost(id):
   targetPost = Posts.query.get(id)
+  allComments = Comment.query.filter_by(post_id=id)
   postImages = Img.query.filter_by(post_id=id)
   targetPost.timesViewed = targetPost.timesViewed + 1
   db.session.commit()
-  return render_template('viewPost.html', targetPost=targetPost, postImages=postImages, postID=id)
+  return render_template('viewPost.html', targetPost=targetPost, postImages=postImages, postID=id, comments=allComments, id=id)
 
 #edit post
 @app.route('/EditPost/<id>', methods=['GET','POST'])
@@ -319,32 +316,32 @@ def messaging(id):
   return render_template('chat.html', usertosend=id, data=data, profileID=current_user.id, userFromAvatar=userFromAvatar, userToAvatar=userToAvatar)
 
 #list Post comments
-@app.route("/listPostComments/<postId>", methods=['GET','POST'])
-def listPostComments(postId):
-  poster = Posts.query.get(id)
+@app.route("/listPostComments/<id>", methods=['GET','POST'])
+def listPostComments(id):
+  allComments = Comment.query.filter_by(post_id=id)
+  '''
   conn = sqlite3.connect('users.db')
   cur = conn.cursor()
-  cur.execute("SELECT * FROM Comment WHERE post_id="+str(postId))
+  cur.execute("SELECT * FROM Comment WHERE post_id="+ str(postId))
   allComments = cur.fetchall()
-  return render_template("listPostComments.html", comments=allComments, postId=postId)
+  '''
+  return render_template("listPostComments.html", comments=allComments, id=id)
 
 #create a post comment
-@app.route("/createPostComment/<postId>", methods=['GET','POST'])
-def createPostComment(postId):
-  targetPost = Posts.query.get(postId)
+@app.route("/createPostComment/<id>", methods=['GET','POST'])
+def createPostComment(id):
+  targetPost = Posts.query.get(id)
   if request.method=="POST":
     title = request.form['title']
     content = request.form['content']
     posted_by = request.form['postedBy']
-    post_id = postId
-    user_id = request.form['user']
+    post_id = id
     rating = 1
-    comment = User(title=title, content=content, rating=rating, post_id=post_id, posted_by = posted_by)
+    comment = Comment(title=title, content=content, rating=rating, post_id=id, posted_by = posted_by)
     db.session.add(comment)
     db.session.commit()
     flash(f'Comment successfully posted!', 'success')
-    return redirect(url_for('createPostComment', postId=post_id))
-  return render_template('createPostComment.html', targetPost=targetPost)
+    return redirect(url_for('viewPost', id=id))
 
 #main page once logged in
 @app.route("/main", methods=['GET','POST'])

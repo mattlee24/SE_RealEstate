@@ -17,11 +17,35 @@ th, td{
     font-size: 25px !important;
     vertical-align: middle !important;
     text-align: center;
-    margin-right: 15px !important;
 }
 .table-button{
     display: block;
     width: 40px !important;
     height: 40px !important;
     text-align: right !important;
+    color: rgb(117, 117, 117);
+}
+
+.button1:hover{
+    color: royalblue;
+}
+.button2:hover{
+    color: whitesmoke;
+}
+.button3:hover{
+    color: red;
+}
+.button4:hover{
+    color: green;
+}
+
+#material-fix{
+    display: inline-block;
+    padding: 0 !important;
+}
+
+.material-icons{
+    margin: 0 !important;
+    margin-left: 0;
+    margin: none;
 }
