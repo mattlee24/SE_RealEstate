@@ -38,6 +38,9 @@ th, td{
 .button4:hover{
     color: green;
 }
+.button4{
+    display: none !important;
+}
 
 #material-fix{
     display: inline-block;

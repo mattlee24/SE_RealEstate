@@ -319,12 +319,6 @@ def messaging(id):
 @app.route("/listPostComments/<id>", methods=['GET','POST'])
 def listPostComments(id):
   allComments = Comment.query.filter_by(post_id=id)
-  '''
-  conn = sqlite3.connect('users.db')
-  cur = conn.cursor()
-  cur.execute("SELECT * FROM Comment WHERE post_id="+ str(postId))
-  allComments = cur.fetchall()
-  '''
   return render_template("listPostComments.html", comments=allComments, id=id)
 
 #create a post comment

@@ -14,7 +14,7 @@
     <div class="commentTitle">
         <h1 id="left">{{row.title}}</h1>
         <h3 id="left">{{current_user.username}}</h3>
-        <h3 id="right">{{row.date}}<h3>
+        <h3 id="right">{{row.date.date()}}<h3>
             <div class="rating">
                 {% if row.rating == 1 %}
                 <span id="bronze" class="material-icons">
