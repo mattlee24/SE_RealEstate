@@ -10,6 +10,7 @@
     {% include 'navbar.html' %}
         <div class="w3-card-4" id="main-section-createPost">
             {% block content %}
+            <!-- The post creation form using bootstrap and jinja syntax as well as validation -->
                 <div class="content-section-createPost"><br>
                     <form method="POST", action="" id="CreatePostForm">
                         {{ form.hidden_tag() }}

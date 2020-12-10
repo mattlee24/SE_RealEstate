@@ -7,7 +7,7 @@
 {% block body %}
 
 {% if current_user.is_authenticated %}
-
+<!-- Navigation bar -->
 <nav id="navSection" class="navbar navbar-expand-lg navbar-dark sticky-top w3-card-4">
   <ul class="navbar-nav">
       <li id="li_item1" class="nav-item">
@@ -29,7 +29,8 @@
       <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button> 
   </form>
 </nav>
-
+<!-- Nav Bar ends here -->
+<!-- flash messages being used -->
 {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
         {% for category, message in messages %}
@@ -39,10 +40,11 @@
         {% endfor %}
     {% endif %}
 {% endwith %}
-
+<!-- Flash Message ends here -->
+<!-- Post container -->
 <div class="container">
+    <!-- Post written details -->
     <div class="test">
-
         <div class="mySlides">
             <img id="postImg"
                 src="{{targetPost.displayImg}}"
@@ -59,8 +61,10 @@
             </ul>
         </div>
     </div>
+    <!-- Post written details end here -->
         <div class="row">
             {% for row in postImages %}
+            <!-- Image Modal -->
                 <div class="clmn" data-toggle="modal" data-target=".bd-example-modal-lg">
                     <img class="imagesSize" src="../static/uploads/images/{{row.name}}">
                 </div>
@@ -130,14 +134,19 @@
             {% endfor %}
         </div>
     </div>
+    <!-- Post container ends here -->
 </div>
+<!-- Inserting the create comment nav bar template -->
 {% include 'createPostComment.html' %}
+<!-- Insertion ends here -->
+<!-- Displaying all post comments -->
 {% for row in comments %}
 <div class="commentCasing">
   <div class="commentTitle">
       <h1 id="left">{{row.title}}</h1>
       <h3 id="left">{{current_user.username}}</h3>
       <h3 id="right">{{row.date.date()}}<h3>
+          <!-- rating and colors -->
           <div class="rating">
               {% if row.rating == 1 %}
               <span id="bronze" class="material-icons">
@@ -191,6 +200,7 @@
               </span>
               {% endif %}
           </div>
+          <!-- Rating and colors ends here -->
   </div>
   <div class="commentContent">
       <p>{{row.content}}<p>
@@ -201,6 +211,7 @@
     </form>
 </div>
 </div>
+<!-- Comment display ends here -->
 
 {% endfor %}
 

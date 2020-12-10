@@ -19,13 +19,14 @@
         {% endif %}
         {% endwith %}
             {% block content %}
+            <!-- User table, containing all users -->
                 <table id="tblUsers" class="theT w3-table w3-card-4 w3-centered">
                     <thead>
                         <th>User ID</th>
                         <th>Name</th>
                         <th>Email</th>
                         <th>Username</th>
-                        {% if current_user.role == 'Administrator Manager' or current_user.role == 'Administrator' %}
+                        {% if current_user.role == 'Administrator' %}<!-- Only display these headings if logged in as Administrator -->
                         <th>Password</th>
                         <th>Role</th>
                         {% endif %}
@@ -33,18 +34,19 @@
                         <th>Actions</th>
                     </thead>
                     <tbody>
-                        {% for user in data %}
+                        {% for user in data %}<!-- For each user in the database, display them as one row in the table -->
                                 <tr>
                                     <td>{{ user[0] }}</td>
                                     <td>{{ user[1] }}</td>
                                     <td>{{ user[2] }}</td>
                                     <td>{{ user[3] }}</td>
-                                    {% if current_user.role == 'Administrator Manager' or current_user.role == 'Administrator' %}
+                                    <!-- Only display content if logged in as Administrator -->
+                                    {% if current_user.role == 'Administrator' %}
                                     <td>{{ user[4] }}</td>
                                     <td>{{ user[5] }}</td>
                                     {% endif %}
                                     <td><img id="image" src="{{ user[6] }}" class="w3-circle"></td>
-                                    {% if current_user.role == 'Administrator Manager' or current_user.role == 'Administrator' %}
+                                    {% if current_user.role == 'Administrator' %}<!-- Only display these buttons if logged in as Administrator -->
                                         <td><a id="material-fix" href="editUser/{{ user[0] }}" class='table-button button4' ><i class='material-icons'>edit</i></a>
                                             <a id="material-fix" class='table-button button1'  href="messaging/{{ user[0] }}"><i class='material-icons'>chat_bubble</i></a>
                                             <a id="material-fix" class='table-button button2'  href="profile/{{ user[0] }}"><i class='material-icons'>visibility</i></a>
@@ -58,6 +60,7 @@
                         {% endfor %}
                     </tbody>
                 </table>
+                <!-- User table ends here -->
             {% endblock content %}
         {% else %}
         <p id="pagenotfound">404</p>

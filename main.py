@@ -1,3 +1,4 @@
+#Below is everything imported into python thats needed to make the code run successfully
 from datetime import datetime
 from flask import Flask, render_template, url_for, flash, redirect, jsonify, request, make_response, session, json
 from forms import *
@@ -10,19 +11,21 @@ import json, os, random, sqlite3
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '6ce3cac9d9f1b9fd29ff5cfa9060401f'
-app.config['IMAGE_UPLOADS'] = 'C:/Users/Matt/Desktop/SE_RealEstate/static/uploads/images'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
-app.config['ALLOWED_IMAGE_EXTENSIONS'] = ["PNG", "JPG", "JPEG", "GIF"]
+app.config['IMAGE_UPLOADS'] = 'C:/Users/Matt/Desktop/SE_RealEstate/static/uploads/images' #Sets the destination folder for images
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db' #Sets destination for the database
+app.config['ALLOWED_IMAGE_EXTENSIONS'] = ["PNG", "JPG", "JPEG", "GIF"] #Sets what file exensions are and aren't allowed
 
+#Three lines below set up the database, password hashing<(bcrypt) and login for the app
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app) 
 login_manager = LoginManager(app)
-#images = UploadSet('images', IMAGES)
 
+#Sets up login
 @login_manager.user_loader
 def load_user(user_id):
   return User.query.get(int(user_id))
 
+#Sets allowed image extensions
 def allowed_image(filename):
   if not "." in filename:
     return False
@@ -32,6 +35,7 @@ def allowed_image(filename):
   else:
     return False
 
+#Defines User table in the database
 class User(db.Model, UserMixin):
   id = db.Column(db.Integer, primary_key=True)
   name = db.Column(db.String, nullable=False)
@@ -48,6 +52,7 @@ class User(db.Model, UserMixin):
   def __repr__(self):
     return f"User('{self.name}', '{self.email}', '{self.username}', '{self.password}', '{self.role}','{self.avatar}', '{self.rating}', '{self.bio}')"
 
+#Defines Posts table in the database
 class Posts(db.Model, UserMixin):
   id = db.Column(db.Integer, primary_key=True)
   title = db.Column(db.String(30), nullable=False)
@@ -63,12 +68,14 @@ class Posts(db.Model, UserMixin):
   def __repr__(self):
     return f"Post('{self.title}', '{self.description}', '{self.date}', '{self.rating}')"
 
+#Defines Img(Image) table in the database
 class Img(db.Model, UserMixin):
   id = db.Column(db.Integer, primary_key=True)
   name = db.Column(db.String, nullable=False)
   imgPath = db.Column(db.String, nullable=False)
   post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), nullable=False)
 
+#Defines Comment table in the database
 class Comment(db.Model, UserMixin):
   id = db.Column(db.Integer, primary_key=True)
   title = db.Column(db.String(50), nullable=False)
@@ -81,6 +88,7 @@ class Comment(db.Model, UserMixin):
   def __repr__(self):
     return f"Post Comment('{self.title}', '{self.content}', '{self.rating}', '{self.date}', '{self.posted_by}')"
 
+#Defines Messages table in the database
 class Messages(db.Model, UserMixin):
   id = db.Column(db.Integer, primary_key=True)
   user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -90,6 +98,7 @@ class Messages(db.Model, UserMixin):
   def __repr__(self):
     return f"Message('{self.user_id}', '{self.to_user_id}', '{self.description}')"
 
+#User can login and use all features of the application
 @app.route("/", methods=['GET','POST'])
 def login():
   form = LoginForm()
@@ -107,12 +116,14 @@ def login():
         flash('Login unsuccessfull, please check email and password!', 'danger')
   return render_template('login.html', form=form)
 
+#User can logout
 @app.route("/logout")
 def logout():
   flash('Logout Successful', 'success')
   logout_user()
   return redirect(url_for('login'))
 
+#The user is able to register with this function
 @app.route("/register", methods=['GET','POST'])
 def register():
   form = RegistrationForm()
@@ -137,6 +148,7 @@ def users():
   data = cur.fetchall()
   return render_template('users.html', data=data)
 
+#Allws administrator ONLY to delete a user
 @app.route("/deleteUser/<id>", methods=['GET','POST','DELETE'])
 def deleteUser(id):
     targetUser = User.query.get(id)
@@ -152,6 +164,7 @@ def deleteUser(id):
     flash('Successfully deleted user from system!','success')
     return redirect(url_for('users'))
 
+#Allows Administrator ONLY to change any users password
 @app.route("/editUser/<id>", methods=['GET','POST'])
 def editUser(id):
   targetUser = User.query.get(id) 
@@ -165,12 +178,13 @@ def editUser(id):
     return redirect(url_for('users'))
   return render_template('editUser.html', form=form, targetUser=targetUser, id=id)
 
-#view user profile
+#view users profiles
 @app.route("/profile/<id>", methods=['GET','POST'])
 def profile(id):
   targetUser = User.query.get(id)
   return render_template('profile.html', targetUser=targetUser, user_ID=id)
 
+#Update current users info, name, username, email and password
 @app.route("/updateProfile/<id>", methods=['GET','POST'])
 def updateProfile(id):
   if request.method == "POST":
@@ -191,6 +205,7 @@ def updateProfile(id):
       flash(f'Account successfully updated!', 'success')
       return redirect(url_for('profile', id=id))
     
+#Update current users bio
 @app.route("/updateBio/<id>", methods=['GET','POST'])
 def updateBio(id):
   if request.method == "POST":
@@ -200,13 +215,13 @@ def updateBio(id):
     flash(f'Account bio successfully updated!', 'success')
     return redirect(url_for('profile', id=id))
 
-#Add Interface
+#View only currently logged in users posts (my posts)
 @app.route("/myposts", methods=['GET','POST'])
 def posts():
   my_posts = Posts.query.filter_by(user_id=current_user.id)
   return render_template("myposts.html", posts=my_posts)
 
-#Add Interface
+#Create Post
 @app.route("/createPost", methods=['GET','POST'])
 def createPost():
   form = CreatePostForm()
@@ -265,7 +280,7 @@ def reportPost(id):
   flash(f'Post successfully reported!', 'success')
   return redirect(url_for('main'))
 
-#upload image
+#upload image - allows user to upload images
 @app.route('/uploadImg/<id>', methods=['GET','POST'])
 def upload(id):
   if request.method == "POST":
@@ -302,7 +317,8 @@ def upload(id):
 
   return render_template('uploadImg.html')
 
-#messaging-view
+'''messaging-view - selects all the messages between two users in the database
+    displays them, in order so that they can continue the conversation'''
 @app.route("/messaging/<id>", methods=['GET','POST'])
 def messaging(id):
   conn = sqlite3.connect('users.db')
@@ -354,7 +370,7 @@ def deletePostComment(id):
     flash("Comment Deleted Successfully!","success")
     return redirect(url_for('viewPost', id=post_id))
 
-#search
+#search - allows user to search through all the posts, by description, title or username
 @app.route("/search", methods=['GET','POST'])
 def search():
   conn = sqlite3.connect('users.db')
@@ -374,7 +390,7 @@ def search():
   return render_template("searchResults.html", data=data, author=author)
 
 
-#main page once logged in
+#main page once logged in - displays all posts, the navbar with links to all other pages
 @app.route("/main", methods=['GET','POST'])
 def main():
   all_posts = Posts.query.all()

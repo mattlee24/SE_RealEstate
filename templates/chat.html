@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<link href="{{ url_for('static', filename='styles/chat.css') }}" rel="stylesheet" type="text/css"/>
+<link href="{{ url_for('static', filename='styles/chat.css') }}" rel="stylesheet" type="text/css"/><!-- Links page with style sheet -->
 <title>Home</title>
 {% endblock %}
 
@@ -11,7 +11,7 @@
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
         {% for category, message in messages %}
-            <div class="alert alert-{{ category }}" id="message">
+            <div class="alert alert-{{ category }}" id="message"><!-- Displays any messages flashed in python  -->
                 {{ message }}
             </div>
         {% endfor %}
@@ -36,7 +36,7 @@
                         </div>
                     {% endif %}
                 {% else %}
-                    {% if 'POST REPORTED!' in message[3] %}
+                    {% if 'POST REPORTED!' in message[3] %} <!-- If a post is reported, styles message accordinly -->
                         <div id="message">
                             <div id="para"><p style="color: red;">{{message[3]}}</p></div>
                             <div id="img"><img src="{{ userToAvatar }}" class="w3-card-4"></div>
@@ -52,7 +52,7 @@
             
         </div>
 
-        <div id="send-container">
+        <div id="send-container"><!-- Contains the form for sending message to user -->
 
             <form method="POST" action="/messaging/{{usertosend}}" id="UploadImageForm">
                 <input type="text" id="message-to-send" name="message" class="form-control form-control-lg">

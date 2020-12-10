@@ -17,7 +17,9 @@
         {% endfor %}
     {% endif %}
     {% endwith %}
+    <!-- Main div containing all posts of the curr nt user-->
     <div id="MainDIV">
+        <!-- For is used to go through all posts and display them -->
         {% for row in posts %}
             <div class="row justify-content-md-center">
                 <div class="col col-md-2">
@@ -48,6 +50,7 @@
                 </div>
             </div>
         {% endfor %}
+        <!-- The for ends here -->
     </div>
 {% else %}
     <p id="pagenotfound">404</p>

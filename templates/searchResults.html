@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block head %}
+<!-- As page styline is the same for this page as the main page, this page uses the styling sheet linked with the main page -->
 <link href="{{ url_for('static', filename='styles/listPosts.css') }}" rel="stylesheet" type="text/css"/>
 <title>Home</title>
 {% endblock %}
@@ -17,7 +18,9 @@
         {% endfor %}
     {% endif %}
     {% endwith %}
+    <!-- container of the whole template, contains the resulted posts from the search -->
     <div id="MainDIV">
+        <!-- The for is used to go through all of the posts and display them -->
         {% for row in data %}
             <div class="row justify-content-md-center">
                 <div class="col col-md-2">
@@ -51,7 +54,9 @@
                 </div>
             </div>
         {% endfor %}
+        <!-- The for ends here -->
     </div>
+    <!-- The mainDiv container ends here -->
 {% else %}
     <p id="pagenotfound">404</p>
     <p id="pagenotfound2">Page Not Found</p>

@@ -1,12 +1,14 @@
 {% extends 'base.html' %}
 {% block head %}
 <title>Edit Password For {{targetUser.name}}</title>
+<!-- Links page with corrosponding style sheet -->
 <link href="{{ url_for('static', filename='styles/editUser.css') }}" rel="stylesheet" type="text/css"/>
 {% endblock %}
 {% block body %}
 
     {% if current_user.is_authenticated %}
         {% include 'navbar.html' %}
+        <!-- Display form to the admnin for changing users passwords -->
             <div class="w3-card-4" id="main-section-editUser">
             {% block content %}
                 <div class="content-section-editUser"><br>
@@ -18,7 +20,7 @@
                                 {% if form.password.errors %}
                                     {{ form.password(class="form-control form-control-lg is-invalid", placeholder="Password") }}
                                     <div class="invalid-feedback">
-                                        {% for error in form.password.errors %}
+                                        {% for error in form.password.errors %}<!--Any erros will be caught here, i.e password not long enough-->
                                             <span>{{ error }}</span>
                                         {% endfor %}
                                     </div>
@@ -51,7 +53,7 @@
             </div> 
             {% endblock content %}
     {% else %}
-        <p id="pagenotfound">404</p>
+        <p id="pagenotfound">404</p><!-- Message displayed if user not logged in and tries to access this page -->
     {% endif %}
 
 {% endblock %}

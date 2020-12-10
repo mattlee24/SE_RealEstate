@@ -17,7 +17,7 @@
         {% endfor %}
     {% endif %}
     {% endwith %}
-
+            <!-- Displays form for editing a post -->
     <div class="w3-card-4" id="main-section-editPost">
         {% block content %}
             <div class="content-section-editPost"><br>
@@ -55,6 +55,7 @@
                         <legend class="border-top pt-3" id="smallPrint-editPost"></legend>
                     </fieldset>
                 </form>
+                <!-- Displays form for adding pictures to a ppost -->
                 <h1 id="uploadH1">Upload an image for this post:</h1>
                 <div class="imgUpload">
                     <form method="POST" action="/uploadImg/{{postID}}" enctype="multipart/form-data" id="UploadImageForm">
@@ -63,10 +64,11 @@
                     </form>
                 </div> 
             </div>
-        {% endblock content %}
+        {% endblock content %}<!-- Form ends here -->
     </div>
 
 {% else %}
+    <!-- Displays if user not logged in -->
     <p id="pagenotfound">404</p>
     <p id="pagenotfound2">Page Not Found</p>
 {% endif %}

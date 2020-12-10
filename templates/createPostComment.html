@@ -1,6 +1,6 @@
-{% block comment %}
-{% if current_user.is_authenticated %}
-<div class="createCommentCasing" id="form">
+{% block content %}
+{% if current_user.is_authenticated %}<!-- Won't display if user isn't logged in -->
+<div class="createCommentCasing" id="form"><!-- Displays form for user to add a comment on chosen post -->
     <h3 id="h3CPC">Post a comment</h3>
     <form action="../createPostComment/{{id}}" method="POST">
         <input type="text" name="title" placeholder="Title">
@@ -11,7 +11,7 @@
 </div>
 
 {% else %}
-<p id="pagenotfound">404</p>
+<p id="pagenotfound">404</p><!-- Will display if user isn't authenticated -->
 <p id="pagenotfound2">Page Not Found</p>
 {% endif %}
 

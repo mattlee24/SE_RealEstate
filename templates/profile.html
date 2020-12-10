@@ -17,8 +17,8 @@
             </div>
         {% endfor %}
     {% endif %}
-    {% endwith %}
-
+    {% endwith %}e
+    <!-- The profile section html code -->
     <div class="profileSection">
         <div class="userInfo">
             <div class="avatar"> 
@@ -26,6 +26,7 @@
             </div>
             <hr id="line">
             <div class="data">
+                <!-- This form is used to display and  update the user's details -->
                 <form method="POST" action="../updateProfile/{{targetUser.id}}" id="form">
                     {% if targetUser.rating == 1 or targetUser.rating == 2 %}
                         <input type="text" id="bronze" name="name" value="{{targetUser.name}}" {% if targetUser.id != current_user.id %} disabled {% endif %}>
@@ -45,6 +46,8 @@
                     {% endif %}
                     <input type="submit" value="Update" id="update" class="btn btn-default" {% if targetUser.id != current_user.id %} style="display: none;" {% endif %}>
                 </form>
+                <!-- Form ends here -->
+                <!-- User Rating and colouring-->
                 <h1 id="ratingH1"><b>Rating: </b></h1>
                 <div class="rating">
                     {% if targetUser.rating == 1 %}
@@ -99,13 +102,16 @@
                     </span>
                     {% endif %}
                 </div>
+                <!-- User colouring ends here -->
             </div>
             <div class="bio">
+                <!-- Update from for the user's bio -->
                 <form method="POST" action="../updateBio/{{targetUser.id}}" id="bio-form">
                     <h1><b>About Me</b></h1>
                     <textarea rows=10 cols="200" id="bio-input" name="bio" style="resize: none;" {% if targetUser.id != current_user.id %} disabled {% endif %}>{{ targetUser.bio }}</textarea>
                     <input type="submit" value="Update Bio" id="update-bio" class="btn btn-default" {% if targetUser.id != current_user.id %} style="display: none;" {% endif %}>
                 </form> 
+                <!-- Update bio form ends here -->
             </div>
         </div>
         <div class="about">

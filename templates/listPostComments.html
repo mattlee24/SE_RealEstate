@@ -1,14 +1,15 @@
 {% extends 'base.html' %}
 
 {% block head %}
+<!-- Links webpage with style sheet -->
 <link href="{{ url_for('static', filename='styles/listComments.css') }}" rel="stylesheet" type="text/css"/>
 <title>Home</title>
 {% endblock %}
 
 {% block body %}
-{% if current_user.is_authenticated %}
+{% if current_user.is_authenticated %}<!-- User must be logged in to view the page -->
 
-{% for row in comments %}
+{% for row in comments %}<!-- For each row in the table display on the page -->
 
 <div class="commentCasing">
     <div class="commentTitle">
@@ -76,7 +77,7 @@
 
 {% endfor %}
 
-{% else %}
+{% else %}<!-- If user isn't logged in, message is displayed -->
     <p id="pagenotfound">404</p>
     <p id="pagenotfound2">Page Not Found</p>
 {% endif %}
