@@ -100,13 +100,11 @@ def login():
       pw_checker = bcrypt.check_password_hash(user.password, form.password.data)
       if pw_checker == True:
         login_user(user)
-        global user_password
-        user_password = form.password.data
         return redirect(url_for('main'))
       else:
-        flash('Login uncessfull, please check email and password!', 'danger')
+        flash('Login unsuccessfull, please check email and password!', 'danger')
     else:
-        flash('Login uncessfull, please check email and password!', 'danger')
+        flash('Login unsuccessfull, please check email and password!', 'danger')
   return render_template('login.html', form=form)
 
 @app.route("/logout")
@@ -154,30 +152,44 @@ def deleteUser(id):
     flash('Successfully deleted user from system!','success')
     return redirect(url_for('users'))
 
-@app.route("/editUser", methods=['GET','POST'])
-def editUser():
+@app.route("/editUser/<id>", methods=['GET','POST'])
+def editUser(id):
+  targetUser = User.query.get(id) 
   form = EditForm()
   if form.validate_on_submit():
-    x = User.query.filter_by(id=form.id.data).first()
+    print("testing")
+    x = User.query.filter_by(id=id).first()
     x.password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
     db.session.commit()
     flash(f'Account for {x.username} successfully updated!', 'success')
     return redirect(url_for('users'))
-  return render_template('editUser.html', form=form)
+  return render_template('editUser.html', form=form, targetUser=targetUser, id=id)
+
+#view user profile
+@app.route("/profile/<id>", methods=['GET','POST'])
+def profile(id):
+  targetUser = User.query.get(id)
+  return render_template('profile.html', targetUser=targetUser, user_ID=id)
 
 @app.route("/updateProfile/<id>", methods=['GET','POST'])
 def updateProfile(id):
   if request.method == "POST":
     x = User.query.filter_by(id=id).first()
-    x.name = request.form['name']
-    x.username = request.form['username']
-    x.email = request.form['email']
-    x.password = bcrypt.generate_password_hash(request.form['password']).decode('utf-8')
-    db.session.commit()
-    global user_password
-    user_password = request.form['password']
-    flash(f'Account successfully updated!', 'success')
-    return redirect(url_for('profile', id=id))
+    try:
+      x.name = request.form['name']
+      x.username = request.form['username']
+      x.email = request.form['email']
+      x.password = bcrypt.generate_password_hash(request.form['password']).decode('utf-8')
+      db.session.commit()
+      flash(f'Account successfully updated!', 'success')
+      return redirect(url_for('profile', id=id))
+    except ValueError:
+      x.name = request.form['name']
+      x.username = request.form['username']
+      x.email = request.form['email']
+      db.session.commit()
+      flash(f'Account successfully updated!', 'success')
+      return redirect(url_for('profile', id=id))
     
 @app.route("/updateBio/<id>", methods=['GET','POST'])
 def updateBio(id):
@@ -290,12 +302,6 @@ def upload(id):
 
   return render_template('uploadImg.html')
 
-#view user
-@app.route("/profile/<id>", methods=['GET','POST'])
-def profile(id):
-  targetUser = User.query.get(id)
-  return render_template('profile.html', targetUser=targetUser, user_ID=id, user_password=user_password)
-
 #messaging-view
 @app.route("/messaging/<id>", methods=['GET','POST'])
 def messaging(id):
@@ -337,9 +343,39 @@ def createPostComment(id):
     flash(f'Comment successfully posted!', 'success')
     return redirect(url_for('viewPost', id=id))
 
+#delete a comment
+@app.route("/deletePostComment/<id>", methods=['GET', 'POST'])
+def deletePostComment(id):
+  if request.method == "POST":
+    targetComment = Comment.query.get(id)
+    post_id = targetComment.post_id
+    db.session.delete(targetComment)
+    db.session.commit()
+    flash("Comment Deleted Successfully!","success")
+    return redirect(url_for('viewPost', id=post_id))
+
+#search
+@app.route("/search", methods=['GET','POST'])
+def search():
+  conn = sqlite3.connect('users.db')
+  cur = conn.cursor()
+  cur.execute("SELECT * FROM posts WHERE title LIKE '%"+request.form['search']+"%' OR description LIKE '%"+request.form['search']+"%'")
+  data = cur.fetchall()
+  if data == []:
+    cur.execute("SELECT * FROM user WHERE username LIKE '%"+request.form['search']+"%'")
+    results = cur.fetchall()
+    if results == []:
+      flash("Nothing found!", "danger")
+      return redirect(url_for('main'))
+    else:
+      cur.execute("SELECT * FROM posts WHERE user_id="+str(results[0][0]))
+      data = cur.fetchall()
+  author = User.query.get(data[0][4])
+  return render_template("searchResults.html", data=data, author=author)
+
+
 #main page once logged in
 @app.route("/main", methods=['GET','POST'])
 def main():
   all_posts = Posts.query.all()
-  print(all_posts)
   return render_template("listPosts.html", posts = all_posts)

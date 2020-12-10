@@ -137,7 +137,7 @@
   <div class="commentTitle">
       <h1 id="left">{{row.title}}</h1>
       <h3 id="left">{{current_user.username}}</h3>
-      <h3 id="right">{{row.date}}<h3>
+      <h3 id="right">{{row.date.date()}}<h3>
           <div class="rating">
               {% if row.rating == 1 %}
               <span id="bronze" class="material-icons">
@@ -195,8 +195,14 @@
   <div class="commentContent">
       <p>{{row.content}}<p>
   </div>
+  <div class="deleteBtnContainer">
+    <form id = "deleteCF" action="/deletePostComment/{{row.id}}" method="POST">
+      <input type="submit" value="Delete" id="delBtn">
+    </form>
 </div>
-{% endfor %}
-{% endif %}
+</div>
 
+{% endfor %}
+
+{% endif %}
 {% endblock %}

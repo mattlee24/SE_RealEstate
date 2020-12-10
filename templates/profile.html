@@ -31,17 +31,17 @@
                         <input type="text" id="bronze" name="name" value="{{targetUser.name}}" {% if targetUser.id != current_user.id %} disabled {% endif %}>
                         <input type="text" id="bronze" name="username" value="{{targetUser.username}}" {% if targetUser.id != current_user.id %} disabled {% endif %}>
                         <input type="text" id="bronze" name="email" value="{{targetUser.email}}" {% if targetUser.id != current_user.id %} disabled {% endif %}>
-                        <input type="text" id="bronze" name="password" value="{{user_password}}" {% if targetUser.id != current_user.id %} disabled {% endif %}>
+                        <input type="text" id="bronze" name="password" placeholder="Enter new Password" {% if targetUser.id != current_user.id %} disabled {% endif %}>
                     {% elif targetUser.rating == 3 or targetUser.rating == 4 %}
                         <input type="text" id="medium" name="name" value="{{targetUser.name}}" {% if targetUser.id != current_user.id %} disabled {% endif %}>
                         <input type="text" id="medium" name="username" value="{{targetUser.username}}" {% if targetUser.id != current_user.id %} disabled {% endif %}>
                         <input type="text" id="medium" name="email" value="{{targetUser.email}}" {% if targetUser.id != current_user.id %} disabled {% endif %}>
-                        <input type="text" id="medium" name="password" value="{{user_password}}" {% if targetUser.id != current_user.id %} disabled {% endif %}>
+                        <input type="text" id="medium" name="password" placeholder="Enter new Password" {% if targetUser.id != current_user.id %} disabled {% endif %}>
                     {% elif targetUser.rating == 5 %}
                         <input type="text" id="max" name="name" value="{{targetUser.name}}" {% if targetUser.id != current_user.id %} disabled {% endif %}>
                         <input type="text" id="max" name="username" value="{{targetUser.username}}" {% if targetUser.id != current_user.id %} disabled {% endif %}>
                         <input type="text" id="max" name="email" value="{{targetUser.email}}" {% if targetUser.id != current_user.id %} disabled {% endif %}>
-                        <input type="text" id="max" name="password" value="{{user_password}}" {% if targetUser.id != current_user.id %} disabled {% endif %}>
+                        <input type="text" id="max" name="password" placeholder="Enter new Password" {% if targetUser.id != current_user.id %} disabled {% endif %}>
                     {% endif %}
                     <input type="submit" value="Update" id="update" class="btn btn-default" {% if targetUser.id != current_user.id %} style="display: none;" {% endif %}>
                 </form>

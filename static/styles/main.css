@@ -162,13 +162,15 @@ nav ul{
     list-style: none;
 }
 #navSection{
+    position: fixed;
+    width: 100%;
     justify-content: space-between;
     background-color: #ffe0e0;
 }
 .w3-table{
     width: 90% !important;
     margin: auto;
-    margin-top: 50px;
+    margin-top: 100px;
     color: grey;
     background-color: #ffe0e0;
     table-layout: fixed;
@@ -301,7 +303,6 @@ nav ul{
 #searchbar input{
     margin-left: 5px;
 }
-/* no scrollbar */
-::-webkit-scrollbar {
+.theT * ::-webkit-scrollbar {
     display: none;
 }

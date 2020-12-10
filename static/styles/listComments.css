@@ -7,19 +7,55 @@
     margin-bottom: 10px;
     background-color: white;
     border: 1px solid  rgb(117, 117, 117);
+    position: relative;
+    
 }
 .commentTitle{
     padding: 10px;
-    height: 25%;
+    height: 210px;
+    width: 20%;
     background-color: #ffe0e0;
     border: 2px double rgb(0,0,0);
     padding: 5px;
+    display: inline;
 }
 .commentContent{
     padding: 10px;
-    height: 75%;
+    padding-right: 0;
+    height: 210px;
     background-color: white;
     text-align:left;
+    display: flex;
+    width: 70%;
+    overflow: scroll;
+    overflow-x: hidden;    
+}
+.commentContent *{
+    padding: 10px;
+    padding-right: 0;
+}
+.deleteBtnContainer{
+    position: absolute;
+    display: flex;
+    height: 100%;
+    width: 10%;
+    right: 0;
+    margin: auto;
+}
+#delBtn{
+    text-align: center;
+    margin: auto;
+    display: inline;
+    border: 2px double black;
+    margin-top: 55%;
+}
+#deleteCF{
+    display: inline;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    background-color: #ffe0e0;
+    border: 2px double black;
 }
 h1{
     margin: 5px;
@@ -45,4 +81,20 @@ h3{
 }
 #medium{
     color: grey;
+}
+
+.commentContent::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+.commentContent::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+}
+   
+.commentContent::-webkit-scrollbar-thumb {
+    background: #888; 
+}
+  
+.commentContent::-webkit-scrollbar-thumb:hover {
+    background: #555; 
 }

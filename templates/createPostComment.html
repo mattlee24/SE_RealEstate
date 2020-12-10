@@ -1,8 +1,9 @@
 {% block comment %}
 {% if current_user.is_authenticated %}
 <div class="createCommentCasing" id="form">
-    <form action="../createPostComment/1" method="POST">
-        <input type="text" name="title" placeholder="title">
+    <h3 id="h3CPC">Post a comment</h3>
+    <form action="../createPostComment/{{id}}" method="POST">
+        <input type="text" name="title" placeholder="Title">
         <input type="textarea" name="content" cols="30" rows="5" placeholder="Type your opinion">
         <input type="hidden" name="postedBy" value="{{current_user.id}}">
         <input type="submit" value="submit">

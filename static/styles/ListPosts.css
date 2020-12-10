@@ -1,5 +1,5 @@
 #MainDIV{
-    margin-top: 5px;
+    margin-top: 100px;
     margin-bottom: 5px;
 }
 .SinglePost{
@@ -104,4 +104,7 @@ ul {
 #report:hover{
     color: #ffe0e0 !important;
     background-color:  rgb(117, 117, 117) !important;
+}
+.alert{
+    margin-top: 50px;
 }

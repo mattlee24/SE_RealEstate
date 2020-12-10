@@ -131,5 +131,8 @@ nav form a{
     color:#ffe0e0;
     background-color: rgba(117, 117, 117, 0.8);
 }
+.alert{
+    margin-top: 50px;
+}
 
 

@@ -20,13 +20,8 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Login', id="submitbtn-login")
 
 class EditForm(FlaskForm):
-    id = IntegerField(validators=[DataRequired()], id="IntegerField")
-    name = StringField(validators=[DataRequired()], id="editName")
-    email = StringField(validators=[DataRequired(), email()], id="editEmail")
-    username = StringField(validators=[DataRequired(), Length(min=2, max=20)], id="editUsername")
     password = PasswordField(validators=[DataRequired(), Length(min=8)])
     confirmPassword = PasswordField(validators=[DataRequired(), EqualTo('password')])
-    role = SelectField(choices=[('Standard User', 'Standard User'),('Administrator', 'Administrator')], id="editRole")
     submit = SubmitField('Update', id="updatebtn")
 
 class EditPostForm(FlaskForm):

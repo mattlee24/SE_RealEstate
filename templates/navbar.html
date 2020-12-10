@@ -16,9 +16,9 @@
                 <a href="../logout" class="btn btn-default"><ion-icon name="backspace"></ion-icon>Logout</a>
             </li>
         </ul>
-        <form id="searchbar" class="form-inline my-2 my-lg-0">
+        <form id="searchbar" class="form-inline my-2 my-lg-0" action="/search" method="POST">
             <a href="../profile/{{current_user.id}}" class="btn btn-default"><ion-icon name="person"></ion-icon>{{ current_user.name }}</a>
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <input class="form-control mr-sm-2" type="text" placeholder="Search" name="search">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button> 
         </form>
     </nav>
